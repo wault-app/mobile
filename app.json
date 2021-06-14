@@ -1,9 +1,9 @@
 {
-  "name": "wault-app",
-  "displayName": "wault-app",
+  "name": "wault",
+  "displayName": "Wault",
   "expo": {
-    "name": "wault-app",
-    "slug": "wault-app",
+    "name": "Wault",
+    "slug": "wault",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"

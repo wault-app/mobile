@@ -8,9 +8,16 @@
     "test": "jest"
   },
   "dependencies": {
+    "aes-js": "^3.1.2",
+    "crypto-js": "^4.0.0",
     "expo": "~41.0.1",
+    "expo-device": "~3.2.0",
+    "expo-secure-store": "~10.1.0",
     "expo-splash-screen": "~0.10.2",
     "expo-updates": "~0.5.4",
+    "jsonwebtoken": "^8.5.1",
+    "node-rsa": "^1.1.1",
+    "pbkdf2": "^3.1.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "~0.63.4",
@@ -20,10 +27,17 @@
     "react-native-screens": "~3.0.0",
     "react-native-unimodules": "~0.13.3",
     "react-native-vector-icons": "^8.1.0",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "zod": "^3.2.0",
+    "expo-random": "~11.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@types/aes-js": "^3.1.1",
+    "@types/crypto-js": "^4.0.1",
+    "@types/jsonwebtoken": "^8.5.1",
+    "@types/node-rsa": "^1.1.0",
+    "@types/pbkdf2": "^3.1.0",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
     "babel-preset-expo": "~8.3.0",
