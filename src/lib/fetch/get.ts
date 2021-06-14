@@ -2,7 +2,7 @@ import WrapperError, { errors } from "../errors/WrapperError";
 import RefreshToken from "../api/RefreshToken";
 import AccessToken from "../api/AccessToken";
 
-export const API_ENDPOINT = "https://wault.app/api";
+export const API_ENDPOINT = __DEV__ ? "https://localhost:3000/api" : "https://wault.app/api";
 
 const get = async <T = {}>(input: RequestInfo, init?: RequestInit): Promise<[T] | [undefined, WrapperError]> => {
     try {

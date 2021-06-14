@@ -67,6 +67,6 @@ export default class SecureStore {
         };
 
         await ExpoSecureStore.setItemAsync(`${key}_index`, JSON.stringify(index));
-        await Promise.all(blocks.map((block, index) => ExpoSecureStore.setItemAsync(`${key}_block_${index}`, block)));
+        await Promise.all(blocks.map(async (block, index) => await ExpoSecureStore.setItemAsync(`${key}_block_${index}`, block)));
     }
 }
