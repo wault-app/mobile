@@ -1,4 +1,4 @@
-package com.waultapp;
+package app.wault;
 
 import android.os.Bundle;
 
