@@ -10,6 +10,8 @@
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^5.9.4",
+    "@reduxjs/toolkit": "^1.6.0",
+    "@types/react-redux": "^7.1.16",
     "aes-js": "^3.1.2",
     "crypto-js": "^4.0.0",
     "expo": "~41.0.1",
@@ -32,6 +34,8 @@
     "react-native-unimodules": "~0.13.3",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.0",
     "zod": "^3.2.0"
   },
   "devDependencies": {
