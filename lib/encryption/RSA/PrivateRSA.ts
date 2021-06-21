@@ -1,16 +1,16 @@
-import SecureStore from "../../api/SecureStore";
-import NodeRSA from "node-rsa";
+import SecureStore from "@lib/api/SecureStore";
+import { RSA } from "react-native-rsa-native";
 
 export default class PrivateRSA {
     public static key = "rsa_key";
-    private secret: NodeRSA;
+    private secret: string;
 
     constructor(key: string) {
-        this.secret = new NodeRSA(key);
+        this.secret = key;
     }
 
     public async decrypt(hash: string) {
-        return await this.secret.decrypt(hash, "utf8");
+        return await RSA.encrypt(hash, this.secret);
     }
 
     public static async get() {
@@ -25,10 +25,10 @@ export default class PrivateRSA {
     }
 
     public static async generate(b = 2048) {
-        const rsa = new NodeRSA({ b });
+        const rsa = await RSA.generateKeys(b);
+        
+        await this.save(rsa.private);
 
-        await this.save(rsa.exportKey());
-
-        return rsa.exportKey("public");
+        return rsa.public;
     }
 }

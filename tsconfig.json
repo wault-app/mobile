@@ -3,5 +3,14 @@
   "compilerOptions": {
     "strict": true,
     "strictNullChecks": false,
+    "baseUrl": "./",
+    "paths": {
+      "@lib/*": [
+        "./lib/*"
+      ],
+      "@components/*": [
+        "./components/*"
+      ]
+    },
   }
 }

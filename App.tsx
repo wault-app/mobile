@@ -1,24 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { Provider } from 'react-redux';
-import store from './src/lib/redux/store';
+import { Provider as StoreProvider } from 'react-redux';
+import store from '@lib/redux/store';
+import { Provider as PaperProvider, Title } from 'react-native-paper';
+import AuthenticationProvider from '@components/providers/AuthenticationProvider';
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Provider store={store}>
-
-      </Provider>
+      <StoreProvider store={store}>
+        <PaperProvider>
+          <AuthenticationProvider>
+            <Title>
+              Szia Lajos
+            </Title>
+          </AuthenticationProvider>
+        </PaperProvider>
+      </StoreProvider>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

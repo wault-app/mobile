@@ -1,8 +1,8 @@
 import Secret from "./Secret";
-import SecureStore from "../api/SecureStore";
-import KeyExchange from "../api/KeyExchange";
-import Safe from "../api/Safe";
-import WrapperError from "../errors/WrapperError";
+import SecureStore from "@lib/api/SecureStore";
+import KeyExchange from "@lib/api/KeyExchange";
+import Safe from "@lib/api/Safe";
+import WrapperError from "@lib/errors/WrapperError";
 
 export default class EncryptionKey {
     public static async generate(safeid: string) {

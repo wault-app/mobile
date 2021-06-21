@@ -8,6 +8,10 @@ type ResponseType = {
 };
 
 export default class User {
+    /**
+     * Loads the user from the stored `access_token`
+     * @returns an object containing data about the user
+     */
     public static async load(): Promise<ResponseType> {
         const token = JWT.decode(await AccessToken.get());
 
