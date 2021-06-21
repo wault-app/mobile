@@ -8,8 +8,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^3.6.5",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^5.9.4",
+    "@react-navigation/stack": "^5.14.5",
     "@reduxjs/toolkit": "^1.6.0",
     "@types/react-redux": "^7.1.16",
     "aes-js": "^3.1.2",
@@ -38,7 +40,8 @@
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
-    "zod": "^3.2.0"
+    "zod": "^3.2.0",
+    "expo-barcode-scanner": "~10.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -48,6 +51,7 @@
     "@types/pbkdf2": "^3.1.0",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
+    "@types/react-native-vector-icons": "^6.4.7",
     "babel-preset-expo": "~8.3.0",
     "jest-expo": "~41.0.0",
     "typescript": "~4.0.0"
