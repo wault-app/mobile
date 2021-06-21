@@ -1,18 +1,30 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import AppLoading from "expo-app-loading";
 import { PropsWithChildren } from "react";
 import RegistrationScreen from "@components/screens/RegistrationScreen";
-import Authentication from "@lib/api/Authentication";
-import { Fragment } from "react";
+import { createContext } from "react";
+import User, { UserType } from "@lib/api/User";
+import { useContext } from "react";
 
 export type AuthenticationProviderProps = PropsWithChildren<{}>;
 
-const AuthenticationProvider = (props: AuthenticationProviderProps) => {
+type UserContextType = {
+    user: UserType;
+};
+
+const UserContext = createContext<UserContextType>(null);
+
+export const useUser = () => useContext(UserContext);
+
+const AuthenticationProvider = ({ children }: AuthenticationProviderProps) => {
+    const [user, setUser] = useState<UserType>();
     const [isLoading, setLoading] = useState(true);
-    const [isLoggedIn, setLoggedIn] = useState(false);
 
     const load = async () => {
-        setLoggedIn(await Authentication.isLoggedIn());
+        const user = await User.load();
+        console.log(user);
+        setUser(user);
+        setLoading(false);
     };
 
     if(isLoading) {
@@ -25,16 +37,12 @@ const AuthenticationProvider = (props: AuthenticationProviderProps) => {
         );
     }
 
-    if(!isLoggedIn) {
-        return (
-            <RegistrationScreen />
-        );
-    }
-
     return (
-        <Fragment>
-            {props.children}
-        </Fragment>
+        <UserContext.Provider value={{ user }}>
+            {!user ? (
+                <RegistrationScreen setUser={setUser} />
+            ) : children}
+        </UserContext.Provider>
     );
 };
 

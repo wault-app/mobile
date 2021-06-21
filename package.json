@@ -22,7 +22,7 @@
     "expo-secure-store": "~10.1.0",
     "expo-splash-screen": "~0.10.2",
     "expo-updates": "~0.5.4",
-    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^3.1.2",
     "pbkdf2": "^3.1.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
