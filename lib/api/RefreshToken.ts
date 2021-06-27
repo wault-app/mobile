@@ -1,6 +1,7 @@
 import SecureStore from "./SecureStore";
 import WrapperError from "@lib/errors/WrapperError";
 import post from "@lib/fetch/post";
+import AccessToken from "./AccessToken";
 
 type ResponseType = {
     accessToken: string;
@@ -41,6 +42,7 @@ export default class RefreshToken {
         if(error) return [null, error];
 
         await RefreshToken.save(data.refreshToken);
+        await AccessToken.save(data.accessToken);
         return [data, null];
     }
 }

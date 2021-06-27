@@ -64,6 +64,7 @@ export default class Authentication {
         type ResponseType = {
             message: "successfully_scanned_authentication_code";
             rsa: string;
+            username: string;
         };
 
         return await post<ResponseType>("/auth/qr/scan", {
