@@ -19,7 +19,7 @@ export default class EncryptionKey {
     public static async getAll(): Promise<[{ [key: string]: string }] | [undefined, WrapperError]> {
         let resp: { [key: string]: string } = {};
 
-        const [keycards, error] = await Safe.getAll();
+        const [keycards, error] = await Safe.getAll(true);
         if(error) return [, error];
 
         await Promise.all(keycards.map(async (keycard) => {

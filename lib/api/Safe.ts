@@ -17,7 +17,7 @@ type KeycardType = {
         name: string;
         items: ({
             id: string;
-            data: { [key: string]: string };
+            data: string;
         })[];
         keycards: ({
             id: string;
@@ -115,21 +115,13 @@ export default class Safe {
                 ...keycard,
                 safe: {
                     ...keycard.safe,
+                    name: await key.decrypt(keycard.safe.name),
                     items: await Promise.all(keycard.safe.items.map(async (item) => ({
                         ...item,
                         data: await (async () => {
-                            const data = await Promise.all(Object.keys(item.data).map(async (objKey) => ({
-                                key: objKey,
-                                value: await key.decrypt(item.data[objKey]),
-                            })))
-
-                            let resp: { [key: string]: string } = {};
-
-                            for(const el of data) {
-                                resp[el.key] = el.value;
-                            }
-
-                            return resp;
+                            // todo: use the methods used in the browser version
+                            console.log(JSON.parse(key.decrypt(item.data)));
+                            return "";
                         })(),
                     }))),
                 }

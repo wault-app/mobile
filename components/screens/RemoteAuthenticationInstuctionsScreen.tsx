@@ -3,6 +3,10 @@ import { ScrollView, StyleSheet } from "react-native";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
+import KeyExchange from "@lib/api/KeyExchange";
+import EncryptionKey from "@lib/encryption/EncryptionKey";
+import Safe from "@lib/api/Safe";
 
 export type RemoteAuthenticationInstuctionsScreenProps = {};
 
@@ -10,6 +14,12 @@ const RemoteAuthenticationInstuctionsScreen = () => {
     const theme = useTheme();
     const navigation = useNavigation();
     
+    useEffect(() => {
+        (async () => {
+            console.log((await Safe.getAll(true))[0][0].safe.name)
+        })();
+    }, []);
+
     return (
         <ScrollView>
             <Icon
@@ -28,7 +38,7 @@ const RemoteAuthenticationInstuctionsScreen = () => {
                 title={"Verify that you can see yourself"}
             />
             <Button
-                onPress={() => navigation.navigate("remote-authentication-scan")}
+                onPress={() => navigation.navigate("RemoteAuthenticationScan")}
             >
                 Scan QR code
             </Button>

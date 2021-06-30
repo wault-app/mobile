@@ -1,7 +1,7 @@
-import PrivateRSA from "@lib/encryption/RSA/PrivateRSA";
 import post from "@lib/fetch/post";
 import EncryptionKey from "@lib/encryption/EncryptionKey";
 import get from "@lib/fetch/get";
+import RSA from "@lib/encryption/RSA";
 
 export default class KeyExchange {
     /**
@@ -16,16 +16,23 @@ export default class KeyExchange {
             })[];
         };
 
-        const key = await PrivateRSA.get();
+        const privateKey = await RSA.load();
 
         const [resp, error] = await get<ResponseType>("/key-exchanges/get");
 
         if(error) return [, error];
 
-        const data = await Promise.all(resp.exchanges.map(async (exchange) => ({
-            safeid: exchange.safeid,
-            content: await key.decrypt(exchange.content),
-        })));
+        console.log(resp);
+        const data = await Promise.all(
+            resp.exchanges.map(
+                async (exchange) => ({
+                    safeid: exchange.safeid,
+                    content: await RSA.decrypt(exchange.content, privateKey),
+                })
+            )
+        );
+
+        console.log(data);
 
         await Promise.all(data.map(async (el) => {
             await EncryptionKey.save(el.safeid, el.content);

@@ -1,5 +1,5 @@
 import React from "react";
-import { RemoteAuthenticationStackParamList } from "@components/navigators/RemoteAuthenticationStack";
+import { RemoteAuthenticationStackParamList, RemoteAuthenticationWrapperStack } from "@components/navigators/RemoteAuthenticationStack";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useEffect } from "react";
@@ -17,19 +17,27 @@ const AuthenticationConfirmationScreen = (props: AuthenticationConfirmationScree
 
     const load = async () => {
         const [user, error] = await Authentication.scan(code);
-        console.log(user, error);
-        
+        console.log(error);
+
         if(error) {
             navigation.goBack();
             return;
         }
-    
+
         setUser(user);
     };
 
     const send = async () => {
         setDisabled(true);
         await Authentication.send(code, user.rsa);
+        
+        navigation.reset({
+            index: 0,
+            routes: [{
+                name: "RemoteAuthenticationSuccess",
+            }],
+        });
+
         setDisabled(false);
     };
 

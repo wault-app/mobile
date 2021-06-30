@@ -1,10 +1,10 @@
 import RefreshToken from "./RefreshToken";
 import * as Device from "expo-device";
-import PrivateRSA from "@lib/encryption/RSA/PrivateRSA";
 import AccessToken from "./AccessToken";
 import EncryptionKey from "@lib/encryption/EncryptionKey";
-import PublicRSA from "@lib/encryption/RSA/PublicRSA";
 import post from "@lib/fetch/post";
+import KeyExchange from "./KeyExchange";
+import RSA from "@lib/encryption/RSA";
 
 /**
  * A library used to handle authentication chores between the REST API and the mobile application.
@@ -24,11 +24,13 @@ export default class Authentication {
             refreshToken: string;
         };
 
+        const { publicKey } = await RSA.generate();
+
         const [data, error] = await post<ResponseType>("/auth/register", {
             body: JSON.stringify({
                 username,
                 deviceName: Device.modelName,
-                rsaKey: await PrivateRSA.generate(),
+                rsaKey: publicKey,
             }),
         });
 
@@ -85,16 +87,26 @@ export default class Authentication {
             message: "successfully_sent_authentication_data",
         };
 
+        // check if there is new keys to be exchanged
+        await KeyExchange.getAll();
+
+        // then query all the encryption keys from local storage
         const [keys, error] = await EncryptionKey.getAll();
         if(error) return [, error];
 
-        const rsa = new PublicRSA(publicKey);
+        // encrypt the currently stored keys
+        const encryptedKeys = await Promise.all(
+            Object.keys(keys).map(
+                async (key) => ({
+                    safeid: key,
+                    content: await RSA.encrypt(keys[key], publicKey),
+                })
+            )
+        );
 
-        const encryptedKeys = await Promise.all(Object.keys(keys).map(async (key) => ({
-            safeid: key,
-            content: await rsa.encrypt(keys[key]),
-        })));
+        console.log(encryptedKeys);
 
+        // create a request towards the server
         return await post<ResponseType>("/auth/qr/send", {
             body: JSON.stringify({
                 id: code,

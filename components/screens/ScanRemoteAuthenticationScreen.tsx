@@ -20,7 +20,7 @@ const ScanRemoteAuthenticationScreen = (props: ScanRemoteAuthenticationScreenPro
     };
 
     const onScan = ({ data: code }: BarCodeScannerResult) => {
-        navigation.navigate("remote-authentication-confirmation", { code });
+        navigation.navigate("RemoteAuthenticationConfirmation", { code });
     };
 
     useEffect(() => {
