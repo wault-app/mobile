@@ -4,8 +4,6 @@ import { Button, List, Text, useTheme } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
-import KeyExchange from "@lib/api/KeyExchange";
-import EncryptionKey from "@lib/encryption/EncryptionKey";
 import Safe from "@lib/api/Safe";
 
 export type RemoteAuthenticationInstuctionsScreenProps = {};

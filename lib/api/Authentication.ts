@@ -31,6 +31,7 @@ export default class Authentication {
                 username,
                 deviceName: Device.modelName,
                 rsaKey: publicKey,
+                type: "MOBILE",
             }),
         });
 
