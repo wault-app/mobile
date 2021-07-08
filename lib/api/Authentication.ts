@@ -105,8 +105,6 @@ export default class Authentication {
             )
         );
 
-        console.log(encryptedKeys);
-
         // create a request towards the server
         return await post<ResponseType>("/auth/qr/send", {
             body: JSON.stringify({
