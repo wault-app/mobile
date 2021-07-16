@@ -20,9 +20,15 @@ export const useKeycards = () => {
         setKeycards([keycard, ...keycards]);
     };
 
+    const refresh = async () => {
+        const keycards = await Safe.getAll(true);
+        setKeycards(keycards);
+    };
+
     return {
         keycards,
         addKeycard,
+        refresh,
     };
 };
  
@@ -31,10 +37,11 @@ const DataProvider = (props: DataProviderProps) => {
     const [error, setError] = useState<WrapperError>();
 
     const load = async () => {
-        const [data, error] = await Safe.getAll(false);
-
-        if(error) setError(error);
-        else setKeycards(data);
+        try {
+            setKeycards(await Safe.getAll(false));
+        } catch(e) {
+            setError(e);
+        }
     };
     
     if(error) {

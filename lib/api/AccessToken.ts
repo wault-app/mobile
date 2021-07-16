@@ -1,4 +1,3 @@
-
 import SecureStore from "@lib/api/SecureStore";
 
 export default class AccessToken {

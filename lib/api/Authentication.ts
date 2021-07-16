@@ -92,9 +92,8 @@ export default class Authentication {
         await KeyExchange.getAll();
 
         // then query all the encryption keys from local storage
-        const [keys, error] = await EncryptionKey.getAll();
-        if(error) return [, error];
-
+        const keys = await EncryptionKey.getAll();
+        
         // encrypt the currently stored keys
         const encryptedKeys = await Promise.all(
             Object.keys(keys).map(

@@ -1,3 +1,4 @@
+import React from "react";
 import WrapperError from "@lib/errors/WrapperError";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text } from "react-native-paper";
@@ -7,6 +8,8 @@ export type ErrorScreenProps = {
 };
 
 const ErrorScreen = (props: ErrorScreenProps) => {
+    console.log(props);
+
     return (
         <ScrollView>
             <Text>

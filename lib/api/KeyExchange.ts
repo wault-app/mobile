@@ -22,7 +22,6 @@ export default class KeyExchange {
 
         if(error) return [, error];
 
-        console.log(resp);
         const data = await Promise.all(
             resp.exchanges.map(
                 async (exchange) => ({
