@@ -18,7 +18,11 @@ export type RemoteAuthenticationStackParamList = {
 
 const RemoteAuthenticationStack = (props: RemoteAuthenticationStackProps) => {
     return (
-        <RemoteAuthenticationWrapperStack.Navigator>
+        <RemoteAuthenticationWrapperStack.Navigator
+            screenOptions={{
+                headerShown: false,
+            }}
+        >
             <RemoteAuthenticationWrapperStack.Screen
                 name={"AuthFlowStack"}
                 component={AuthFlowStack}
@@ -33,7 +37,11 @@ const RemoteAuthenticationStack = (props: RemoteAuthenticationStackProps) => {
 
 const AuthFlowStack = () => {
     return (
-        <ScanFlowStack.Navigator>
+        <ScanFlowStack.Navigator
+            screenOptions={{
+                headerShown: false,
+            }}
+        >
             <ScanFlowStack.Screen
                 name={"RemoteAuthenticationInstructions"}
                 component={RemoteAuthenticationInstuctionsScreen}
