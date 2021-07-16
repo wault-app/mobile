@@ -11,12 +11,6 @@ export type RemoteAuthenticationInstuctionsScreenProps = {};
 const RemoteAuthenticationInstuctionsScreen = () => {
     const theme = useTheme();
     const navigation = useNavigation();
-    
-    useEffect(() => {
-        (async () => {
-            console.log((await Safe.getAll(true))[0][0].safe.name)
-        })();
-    }, []);
 
     return (
         <ScrollView>

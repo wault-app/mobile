@@ -1,8 +1,7 @@
 import * as ExpoSecureStore from "expo-secure-store";
-
-type IndexStorageType  = {
-    blocks: number;
-};
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Secret from "@lib/encryption/Secret";
+import AES from "@lib/encryption/AES";
 
 /**
  * A wrapper class for `expo-secure-store` implementing storage for more then 2048 bytes
@@ -13,60 +12,41 @@ export default class SecureStore {
     }
 
     public static async deleteItemAsync(key: string) {
-        const index = await this.getIndex(key);
-        if(!index) return;
-        
-        const blocksCounter = index.blocks;
-
-        const blockIds = [];
-        for(let i = 0; i < blocksCounter; i++) {
-            blockIds.push(i);
-        }
-
-        await ExpoSecureStore.deleteItemAsync(`${key}_index`);
-        await Promise.all(blockIds.map((index) => ExpoSecureStore.deleteItemAsync(`${key}_block_${index}`)));
+        // Remove the encryption key and the secret
+        await Promise.all([
+            ExpoSecureStore.deleteItemAsync(`wault_secure_store_secret_${key}`),
+            AsyncStorage.removeItem(`wault_secure_store_value_${key}`),
+        ])
     }
 
-    private static async getIndex(key: string) {
-        const stored = await ExpoSecureStore.getItemAsync(`${key}_index`);
-        if(!stored) return; 
-        const data: IndexStorageType = JSON.parse(stored);
-        return data;
-    }
+    public static async getItemAsync(key: string) {
+        // Get the secret encryption key and the value from two separate source
+        const [secret, encrypted] = await Promise.all([
+            ExpoSecureStore.getItemAsync(`wault_secure_store_secret_${key}`),
+            AsyncStorage.getItem(`wault_secure_store_value_${key}`),
+        ]);
 
-    public static async getItemAsync(key: string): Promise<string | null> {
-        const index = await this.getIndex(key);
-        if(!index) return;
+        // If either the secret or the value is missing, then just return null
+        if(!secret || !encrypted) return;
 
-        const blocksCounter = index.blocks;
-
-        const blockIds = [];
-        for(let i = 0; i < blocksCounter; i++) {
-            blockIds.push(i);
-        }
-
-        const data = await Promise.all(blockIds.map((index) => ExpoSecureStore.getItemAsync(`${key}_block_${index}`)))
-
-        return data.join("");
+        // Decrypt the data and send back the response
+        return AES.decrypt(encrypted, secret);
     }
 
     public static async setItemAsync(key: string, value: string) {
-        await this.deleteItemAsync(key);
-        
-        const blockSize = 512;
-        const numberOfBlocks = Math.ceil(value.length / blockSize);
+        // Generate a new secret, that we are going to use to encrypt data
+        const secret = await Secret.generate();
 
-        const blocks: string[] = [];
-    
-        for(let i = 0; i < numberOfBlocks; i++) {
-            blocks.push(value.substr(i * blockSize, blockSize));
-        }
+        // Store this secret in the SecureStorage for later usage
+        await ExpoSecureStore.setItemAsync(`wault_secure_store_secret_${key}`, secret);
 
-        const index: IndexStorageType = {
-            blocks: numberOfBlocks,
-        };
+        // Encrypt the given plain string object
+        const encrypted = AES.encrypt(value, secret);
 
-        await ExpoSecureStore.setItemAsync(`${key}_index`, JSON.stringify(index));
-        await Promise.all(blocks.map(async (block, index) => await ExpoSecureStore.setItemAsync(`${key}_block_${index}`, block)));
+        // Store the encrypted string inside the AsyncStorage
+        await AsyncStorage.setItem(`wault_secure_store_value_${key}`, encrypted);
+
+        // Return a `true` value to inidcate success
+        return true;
     }
 }
