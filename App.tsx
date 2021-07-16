@@ -4,6 +4,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import AuthenticationProvider from '@components/providers/AuthenticationProvider';
 import { enableScreens } from 'react-native-screens';
 import RemoteAuthenticationStack from "@components/navigators/RemoteAuthenticationStack";
+import DataProvider from '@components/providers/DataProvider';
 
 enableScreens();
 
@@ -12,7 +13,9 @@ export default function App() {
     <NavigationContainer>
       <PaperProvider>
         <AuthenticationProvider>
-          <RemoteAuthenticationStack />
+          <DataProvider>
+            <RemoteAuthenticationStack />
+          </DataProvider>
         </AuthenticationProvider>
       </PaperProvider>
     </NavigationContainer>

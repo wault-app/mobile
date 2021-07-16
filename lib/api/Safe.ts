@@ -9,26 +9,28 @@ import post from "@lib/fetch/post";
 
 export type RoleType = "OWNER" | "WRITER" | "READER";
 
-type KeycardType = {
+export type KeycardType = {
     id: string;
     role: RoleType;
-    safe: {
+    safe: SafeType;
+};
+
+export type SafeType = {
+    id: string;
+    name: string;
+    items: ({
         id: string;
-        name: string;
-        items: ({
+        data: string;
+    })[];
+    keycards: ({
+        id: string;
+        role: RoleType;
+        user: {
             id: string;
-            data: string;
-        })[];
-        keycards: ({
-            id: string;
-            role: RoleType;
-            user: {
-                id: string;
-                username: string;
-                devices: DeviceType[];
-            };
-        })[];
-    }
+            username: string;
+            devices: DeviceType[];
+        };
+    })[];
 };
 
 type ResponseType = {
