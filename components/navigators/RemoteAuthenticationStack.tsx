@@ -1,9 +1,9 @@
 import React from "react";
-import RemoteAuthenticationInstuctionsScreen from "@components/screens/RemoteAuthenticationInstuctionsScreen";
-import ScanRemoteAuthenticationScreen from "@components/screens/ScanRemoteAuthenticationScreen";
-import AuthenticationConfirmationScreen from "@components/screens/AuthenticationConfirmationScreen";
+import RemoteAuthenticationInstuctionsScreen from "@components/screens/authentication/RemoteAuthenticationInstuctionsScreen";
+import ScanRemoteAuthenticationScreen from "@components/screens/authentication/ScanRemoteAuthenticationScreen";
+import AuthenticationConfirmationScreen from "@components/screens/authentication/AuthenticationConfirmationScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import RemoteAuthenticationSuccessScreen from "@components/screens/RemoteAuthenticationSuccessScreen";
+import RemoteAuthenticationSuccessScreen from "@components/screens/authentication/RemoteAuthenticationSuccessScreen";
 
 const ScanFlowStack = createStackNavigator();
 export const RemoteAuthenticationWrapperStack = createStackNavigator();

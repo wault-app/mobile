@@ -1,9 +1,7 @@
-import React from "react";
-import { RemoteAuthenticationStackParamList, RemoteAuthenticationWrapperStack } from "@components/navigators/RemoteAuthenticationStack";
+import React, { useEffect, useState }  from "react";
+import { RemoteAuthenticationStackParamList } from "@components/navigators/RemoteAuthenticationStack";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useEffect } from "react";
-import { useState } from "react";
 import Authentication from "@lib/api/Authentication";
 import { Title, Subheading, Caption, Button } from "react-native-paper";
 
