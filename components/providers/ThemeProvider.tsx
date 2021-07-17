@@ -4,6 +4,7 @@ import merge from "deepmerge";
 import { NavigationContainer, DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationDefaultTheme } from "@react-navigation/native";
 import { DarkTheme as PaperDarkTheme, DefaultTheme as PaperDefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import changeNavigationBarColor from "react-native-navigation-bar-color";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type ThemeProviderProps = PropsWithChildren<{}>;
 
@@ -23,6 +24,14 @@ const ThemeProvider = (props: ThemeProviderProps) => {
     const colorSchema = Appearance.getColorScheme();
 
     const theme = state === "dark" ? CombinedDarkTheme : state === "light" ? CombinedDefaultTheme : colorSchema === "dark" ? CombinedDarkTheme : CombinedDefaultTheme;
+
+    useEffect(() => {
+        (async () => {
+            const value = await AsyncStorage.getItem("theme");
+            const theme = value === "light" ? "light" : value === "dark" ? "dark" : "system-preference";
+            setState(theme);
+        })();
+    }, []);
 
     useEffect(() => {
         // create a string of a number with leading zeros

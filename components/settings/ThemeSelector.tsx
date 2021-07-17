@@ -2,6 +2,7 @@ import CustomBackground from "@components/modal/CustomBackground";
 import Handle from "@components/modal/CustomHandle";
 import { useTheme } from "@components/providers/ThemeProvider";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { Fragment } from "react";
 import { useMemo } from "react";
 import { useRef } from "react";
@@ -36,7 +37,11 @@ const ThemeSelector = () => {
                     }}
                 >
                     <ScrollView>
-                        <RadioButton.Group onValueChange={(value) => setTheme(value === "light" ? "light" : value === "dark" ? "dark" : "system-preference")} value={theme}>
+                        <RadioButton.Group onValueChange={async (value) => {
+                            const theme = value === "light" ? "light" : value === "dark" ? "dark" : "system-preference";
+                            setTheme(theme);
+                            await AsyncStorage.setItem("theme", theme);
+                        }} value={theme}>
                             <RadioButton.Item label={"Use system preference"} value={"system-preference"} />
                             <RadioButton.Item label={"Light theme"} value={"light"} />
                             <RadioButton.Item label={"Dark theme"} value={"dark"} />
