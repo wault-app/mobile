@@ -49,14 +49,14 @@ const Handle: React.FC<HandleProps> = ({ style, animatedIndex }) => {
             borderTopRightRadius: borderTopRadius,
         };
     });
-    
+
     const leftIndicatorStyle = useMemo(
         () => ({
             ...styles.indicator,
             ...styles.leftIndicator,
-            backgroundColor: theme.dark ? "#fff" : "#000",
+            backgroundColor: theme.colors.text,
         }),
-        []
+        [theme]
     );
 
     const leftIndicatorAnimatedStyle = useAnimatedStyle(() => {
@@ -83,9 +83,9 @@ const Handle: React.FC<HandleProps> = ({ style, animatedIndex }) => {
         () => ({
             ...styles.indicator,
             ...styles.rightIndicator,
-            backgroundColor: theme.dark ? "#fff" : "#000",
+            backgroundColor: theme.colors.text,
         }),
-        []
+        [theme]
     );
 
     const rightIndicatorAnimatedStyle = useAnimatedStyle(() => {

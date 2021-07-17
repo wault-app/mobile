@@ -40,6 +40,7 @@ const ThemeSelector = () => {
                         <RadioButton.Group onValueChange={async (value) => {
                             const theme = value === "light" ? "light" : value === "dark" ? "dark" : "system-preference";
                             setTheme(theme);
+                            bottomSheet.current.close();
                             await AsyncStorage.setItem("theme", theme);
                         }} value={theme}>
                             <RadioButton.Item label={"Use system preference"} value={"system-preference"} />

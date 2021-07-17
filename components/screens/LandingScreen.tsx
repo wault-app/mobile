@@ -1,29 +1,30 @@
+import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import AccountItem from "@components/accounts/AccountItem";
 import CustomBackground from "@components/modal/CustomBackground";
-import { useUser } from "@components/providers/AuthenticationProvider";
 import { useKeycards } from "@components/providers/DataProvider";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import React, { Fragment } from "react";
-import { useMemo } from "react";
-import { useRef } from "react";
-import { useState } from "react";
 import { Dimensions, RefreshControl, SectionList } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { List } from "react-native-paper";
+import { List, Portal } from "react-native-paper";
 import Handle from "@components/modal/CustomHandle";
-import { ItemType } from "@lib/api/Item";
+import { AccountType, ItemType } from "@lib/api/Item";
 import { DataProvider, LayoutProvider, RecyclerListView } from "recyclerlistview";
+import CopyUsernameButton from "@components/accounts/CopyUsernameButton";
+import CopyPasswordButton from "@components/accounts/CopyPasswordButton";
+import OpenInBrowserButton from "@components/accounts/OpenInBrowserButton";
+import Toast from "react-native-toast-message";
 
 export type LandingScreenProps = {};
 
 const LandingScreen = (props: LandingScreenProps) => {
-    const { user } = useUser();
+    const { width } = Dimensions.get("window");
+
     const { keycards, refresh } = useKeycards();
     const [refreshing, setRefreshing] = useState(false);
     const [provider, setProvider] = useState(new DataProvider((r1, r2) => r1 !== r2));
 
-    const { width } = Dimensions.get("window");
+    const [account, setAccount] = useState<AccountType>();
 
     const bottomSheet = useRef<BottomSheet>();
     const snapPoints = useMemo(() => [0, 200, "80%"], []);
@@ -33,7 +34,7 @@ const LandingScreen = (props: LandingScreenProps) => {
         dim.height = 72;
     });
 
-    useMemo(() => {
+    useEffect(() => {
         const data = [];
         for(const keycard of keycards) {
             data.push(...keycard.safe.items);
@@ -67,7 +68,10 @@ const LandingScreen = (props: LandingScreenProps) => {
                 }}
                 rowRenderer={(index, item: ItemType) => (
                     item.type === "account" ? (
-                        <AccountItem account={item} onOpenSheet={() => bottomSheet.current.snapTo(1)} />
+                        <AccountItem account={item} onOpenSheet={() => {
+                            setAccount(item);
+                            bottomSheet.current.snapTo(1);
+                        }} />
                     ) : (<List.Item
                         title={item.id}
                         onPress={() => console.log(item)}
@@ -75,20 +79,52 @@ const LandingScreen = (props: LandingScreenProps) => {
                     )
                 )}
             />
-            <BottomSheet
-                snapPoints={snapPoints}
-                ref={bottomSheet}
-                backgroundComponent={CustomBackground}
-                backdropComponent={BottomSheetBackdrop}
-                handleComponent={Handle}
-                onChange={(index) => {
-                    if (index === 0) bottomSheet.current.close();
-                }}
-            >
-                <ScrollView>
+            <Portal>
+                <BottomSheet
+                    snapPoints={snapPoints}
+                    ref={bottomSheet}
+                    backgroundComponent={CustomBackground}
+                    backdropComponent={BottomSheetBackdrop}
+                    handleComponent={Handle}
+                    onChange={(index) => {
+                        if (index === 0) bottomSheet.current.close();
+                    }}
+                >
+                    <ScrollView>
+                        {(account?.url || account?.platform) && (
+                            <OpenInBrowserButton
+                                url={`https://${account.platform}` || account.url}
+                            />
+                        )}
+                        {account?.username && (
+                            <CopyUsernameButton
+                                username={account.username}
+                                onCopy={() => {
+                                    Toast.show({
+                                        type: "success",
+                                        text1: "Successfully copied username to clipboard!",
+                                    });
 
-                </ScrollView>
-            </BottomSheet>
+                                    bottomSheet.current.close();
+                                }}
+                            />
+                        )}
+                        {account?.password && (
+                            <CopyPasswordButton
+                                password={account.password}
+                                onCopy={() => {
+                                    Toast.show({
+                                        type: "success",
+                                        text1: "Successfully copied password to clipboard!",
+                                    });
+
+                                    bottomSheet.current.close();
+                                }}
+                            />
+                        )}
+                    </ScrollView>
+                </BottomSheet>
+            </Portal>
         </Fragment>
     );
 };
