@@ -54,6 +54,7 @@ const ThemeProvider = (props: ThemeProviderProps) => {
             <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
                 <StatusBar
                     translucent
+                    barStyle={theme.dark ? "light-content" : "dark-content"}
                     backgroundColor="transparent"
                 />
                 <PaperProvider theme={theme}>

@@ -100,11 +100,6 @@ const LandingScreen = (props: LandingScreenProps) => {
                             <CopyUsernameButton
                                 username={account.username}
                                 onCopy={() => {
-                                    Toast.show({
-                                        type: "success",
-                                        text1: "Successfully copied username to clipboard!",
-                                    });
-
                                     bottomSheet.current.close();
                                 }}
                             />
@@ -113,11 +108,6 @@ const LandingScreen = (props: LandingScreenProps) => {
                             <CopyPasswordButton
                                 password={account.password}
                                 onCopy={() => {
-                                    Toast.show({
-                                        type: "success",
-                                        text1: "Successfully copied password to clipboard!",
-                                    });
-
                                     bottomSheet.current.close();
                                 }}
                             />

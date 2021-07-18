@@ -2,22 +2,25 @@ import React, { Fragment } from "react";
 import { AccountType } from "@lib/api/Item";
 import { List } from "react-native-paper";
 import PlatformIcon from "@components/platforms/PlatformIcon";
+import { useNavigation } from "@react-navigation/native";
 
 export type AccountItemProps = {
     account: AccountType;
     onOpenSheet: () => void;
 };
 
-export default class AccountItem extends React.PureComponent<AccountItemProps> {
-    render() {
+const AccountItem = (props: AccountItemProps) => {
+    const navigation = useNavigation();
+
         return (
             <List.Item
-                title={this.props.account.platform}
-                description={this.props.account.username}
-                onPress={() => {}}
-                onLongPress={() => this.props.onOpenSheet()}
-                left={() => <PlatformIcon platform={this.props.account.platform} />}
+                title={props.account.platform}
+                description={props.account.username}
+                onPress={() => navigation.navigate("account-info", { account: props.account })}
+                onLongPress={() => props.onOpenSheet()}
+                left={() => <PlatformIcon platform={props.account.platform} />}
             />
         );
-    }
 };
+
+export default AccountItem;

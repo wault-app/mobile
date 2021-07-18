@@ -5,6 +5,7 @@ import RemoteAuthenticationStack from "./RemoteAuthenticationStack";
 import OptionsScreen from "@components/screens/OptionsScreen";
 import { Appbar, Avatar, Title } from "react-native-paper";
 import { useUser } from "@components/providers/AuthenticationProvider";
+import AccountScreen from "@components/screens/AccountScreen";
 
 const MainStack = createStackNavigator();
 
@@ -15,7 +16,7 @@ const MainNavigator = () => {
         <MainStack.Navigator
             screenOptions={{
                 header: (props) => (
-                    <Appbar.Header>
+                    <Appbar.Header theme={{ colors: { primary: "#ffffff" } }}>
                         {props.navigation.canGoBack() && (
                             <Appbar.BackAction onPress={() => props.navigation.goBack()} />
                         )}
@@ -28,7 +29,7 @@ const MainNavigator = () => {
                 component={LandingScreen}
                 options={{
                     header: (props) => (
-                        <Appbar.Header>
+                        <Appbar.Header theme={{ colors: { primary: "#ffffff" } }}>
                             <Appbar.Content title={user.username} />
                             <Appbar.Action icon="cog" onPress={() => props.navigation.navigate("options")} />
                         </Appbar.Header>
@@ -38,6 +39,10 @@ const MainNavigator = () => {
             <MainStack.Screen
                 name={"options"}
                 component={OptionsScreen}
+            />
+            <MainStack.Screen
+                name={"account-info"}
+                component={AccountScreen}
             />
             <MainStack.Screen
                 name={"remote-authentication"}
