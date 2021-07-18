@@ -1,19 +1,16 @@
 import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import AccountItem from "@components/accounts/AccountItem";
-import CustomBackground from "@components/modal/CustomBackground";
 import { useKeycards } from "@components/providers/DataProvider";
-import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { Dimensions, RefreshControl, SectionList } from "react-native";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { Dimensions, RefreshControl } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { List, Portal } from "react-native-paper";
-import Handle from "@components/modal/CustomHandle";
+import { List } from "react-native-paper";
 import { AccountType, ItemType } from "@lib/api/Item";
 import { DataProvider, LayoutProvider, RecyclerListView } from "recyclerlistview";
 import CopyUsernameButton from "@components/accounts/CopyUsernameButton";
 import CopyPasswordButton from "@components/accounts/CopyPasswordButton";
 import OpenInBrowserButton from "@components/accounts/OpenInBrowserButton";
-import Toast from "react-native-toast-message";
+import BottomSheet, { useBottomSheet } from "@components/modal/BottomSheet";
 
 export type LandingScreenProps = {};
 
@@ -26,7 +23,7 @@ const LandingScreen = (props: LandingScreenProps) => {
 
     const [account, setAccount] = useState<AccountType>();
 
-    const sheet = useRef<BottomSheetModal>();
+    const sheet = useBottomSheet();
     const snapPoints = useMemo(() => [200, "80%"], []);
 
     const layoutProvider = new LayoutProvider((index) => 1, (type, dim) => {
@@ -79,12 +76,9 @@ const LandingScreen = (props: LandingScreenProps) => {
                     )
                 )}
             />
-            <BottomSheetModal
+            <BottomSheet
                 snapPoints={snapPoints}
                 ref={sheet}
-                backgroundComponent={CustomBackground}
-                backdropComponent={BottomSheetBackdrop}
-                handleComponent={Handle}
             >
                 <ScrollView>
                     {!!(account?.url || account?.platform) && (
@@ -109,7 +103,7 @@ const LandingScreen = (props: LandingScreenProps) => {
                         />
                     )}
                 </ScrollView>
-            </BottomSheetModal>
+            </BottomSheet>
         </Fragment>
     );
 };

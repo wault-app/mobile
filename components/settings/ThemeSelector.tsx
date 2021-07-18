@@ -1,7 +1,7 @@
+import BottomSheet, { useBottomSheet } from "@components/modal/BottomSheet";
 import CustomBackground from "@components/modal/CustomBackground";
 import Handle from "@components/modal/CustomHandle";
 import { useTheme } from "@components/providers/ThemeProvider";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { Fragment } from "react";
 import { useMemo } from "react";
@@ -14,7 +14,7 @@ export type ThemeSelectorProps = {};
 
 const ThemeSelector = () => {
     const { theme, setTheme } = useTheme();
-    const bottomSheet = useRef<BottomSheetModal>();
+    const bottomSheet = useBottomSheet();
     const snapPoints = useMemo(() => [300], []);
 
     return (
@@ -25,11 +25,8 @@ const ThemeSelector = () => {
                 onPress={() => bottomSheet.current.present()}
                 left={props => <List.Icon {...props} icon="brightness-2" />}
             />
-            <BottomSheetModal
+            <BottomSheet
                 snapPoints={snapPoints}
-                backgroundComponent={CustomBackground}
-                backdropComponent={BottomSheetBackdrop}
-                handleComponent={Handle}
                 ref={bottomSheet}
             >
                 <ScrollView>
@@ -44,7 +41,7 @@ const ThemeSelector = () => {
                         <RadioButton.Item label={"Dark theme"} value={"dark"} />
                     </RadioButton.Group>
                 </ScrollView>
-            </BottomSheetModal>
+            </BottomSheet>
         </View>
     );
 };

@@ -1,19 +1,15 @@
 import React, { Fragment } from "react";
 import { useBiometric } from "@components/providers/BiometricProvider";
-import { List, Portal, RadioButton } from "react-native-paper";
-import { useState } from "react";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
+import { List, RadioButton } from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 import { useMemo } from "react";
-import { useRef } from "react";
-import Handle from "@components/modal/CustomHandle";
-import CustomBackground from "@components/modal/CustomBackground";
+import BottomSheet, { useBottomSheet } from "@components/modal/BottomSheet";
 
 export type BiometricButtonProps = {};
 
 const BiometricButton = () => {
     const { isEnabled, toggle } = useBiometric();
-    const bottomSheet = useRef<BottomSheetModal>();
+    const bottomSheet = useBottomSheet();
 
     const snapPoints = useMemo(() => [200], []);
 
@@ -25,10 +21,7 @@ const BiometricButton = () => {
                 left={(props) => <List.Icon {...props} icon={"fingerprint"} />}
                 description={isEnabled ? "Enabled" : "Disabled"}
             />
-                <BottomSheetModal
-                    backdropComponent={BottomSheetBackdrop}
-                    handleComponent={Handle}
-                    backgroundComponent={CustomBackground}
+                <BottomSheet
                     snapPoints={snapPoints}
                     ref={bottomSheet}
                 >
@@ -44,7 +37,7 @@ const BiometricButton = () => {
                             />
                         </RadioButton.Group>
                     </ScrollView>
-                </BottomSheetModal>
+                </BottomSheet>
         </Fragment>
     );
 };

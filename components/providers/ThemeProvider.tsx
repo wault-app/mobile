@@ -5,6 +5,7 @@ import { NavigationContainer, DarkTheme as NavigationDarkTheme, DefaultTheme as 
 import { DarkTheme as PaperDarkTheme, DefaultTheme as PaperDefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import changeNavigationBarColor from "react-native-navigation-bar-color";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Colors from "@lib/Colors";
 
 export type ThemeProviderProps = PropsWithChildren<{}>;
 
@@ -34,19 +35,8 @@ const ThemeProvider = (props: ThemeProviderProps) => {
     }, []);
 
     useEffect(() => {
-        // create a string of a number with leading zeros
-        const pad = (num: string, size: number) => String(num).padStart(size, '0');
-
-        // extract rgb values
-        let s = theme.colors.background;
-        s = s.substring(s.indexOf("(") + 1);
-        s = s.substring(0, s.indexOf(")"));
-
-        // generate hex
-        const hex = `#${s.split(", ").map((el) => pad(parseInt(el).toString(16), 2)).join("")}`;
-
         // apply it to the navigation bar
-        changeNavigationBarColor(hex, theme.dark, true);
+        changeNavigationBarColor(Colors.rgbToHex(theme.colors.background), theme.dark, true);
     }, [theme]);
 
     return (
