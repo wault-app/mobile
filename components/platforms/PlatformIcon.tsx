@@ -4,7 +4,12 @@ import { View, StyleSheet } from "react-native";
 import { Avatar } from "react-native-paper";
 import CustomAvatar from "./PlatformIcon/Avatar";
 
-const PlatformIcon = ({ platform, size = 40 }: { platform: string; size?: number }) => {
+export type PlatformIconProps = {
+    platform: string;
+    size?: number;
+};
+
+const PlatformIcon = ({ platform, size = 40 }: PlatformIconProps) => {
     const data = Platforms.get(platform.toLowerCase());
     const iconSize = size / 40 * 24;
 
@@ -12,7 +17,7 @@ const PlatformIcon = ({ platform, size = 40 }: { platform: string; size?: number
         width: size,
         height: size,
     };
-    
+
     if (data) {
         if (data.icon) {
             return (

@@ -11,6 +11,7 @@ import CopyUsernameButton from "@components/accounts/CopyUsernameButton";
 import CopyPasswordButton from "@components/accounts/CopyPasswordButton";
 import OpenInBrowserButton from "@components/accounts/OpenInBrowserButton";
 import BottomSheet, { useBottomSheet } from "@components/modal/BottomSheet";
+import CreditCardItem from "@components/cards/CreditCardItem";
 
 export type LandingScreenProps = {};
 
@@ -69,10 +70,10 @@ const LandingScreen = (props: LandingScreenProps) => {
                             setAccount(item);
                             sheet.current.present();
                         }} />
-                    ) : (<List.Item
-                        title={item.id}
-                        onPress={() => console.log(item)}
-                    />
+                    ) : item.type === "credit-card" && (
+                        <CreditCardItem
+                            creditCard={item}
+                        />
                     )
                 )}
             />
