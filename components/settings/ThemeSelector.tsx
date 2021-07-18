@@ -1,7 +1,7 @@
 import CustomBackground from "@components/modal/CustomBackground";
 import Handle from "@components/modal/CustomHandle";
 import { useTheme } from "@components/providers/ThemeProvider";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { Fragment } from "react";
 import { useMemo } from "react";
@@ -14,7 +14,7 @@ export type ThemeSelectorProps = {};
 
 const ThemeSelector = () => {
     const { theme, setTheme } = useTheme();
-    const bottomSheet = useRef<BottomSheet>();
+    const bottomSheet = useRef<BottomSheetModal>();
     const snapPoints = useMemo(() => [0, 300], []);
 
     return (
@@ -32,6 +32,7 @@ const ThemeSelector = () => {
                     backdropComponent={BottomSheetBackdrop}
                     handleComponent={Handle}
                     ref={bottomSheet}
+                    index={0}
                     onChange={(index) => {
                         if (index === 0) bottomSheet.current.close();
                     }}
