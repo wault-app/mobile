@@ -15,42 +15,36 @@ export type ThemeSelectorProps = {};
 const ThemeSelector = () => {
     const { theme, setTheme } = useTheme();
     const bottomSheet = useRef<BottomSheetModal>();
-    const snapPoints = useMemo(() => [0, 300], []);
+    const snapPoints = useMemo(() => [300], []);
 
     return (
         <View>
             <List.Item
                 title={"Theme"}
                 description={theme === "system-preference" ? "Use system preference" : theme === "dark" ? "Dark theme" : "Light theme"}
-                onPress={() => bottomSheet.current.snapTo(1)}
+                onPress={() => bottomSheet.current.present()}
                 left={props => <List.Icon {...props} icon="brightness-2" />}
             />
-            <Portal>
-                <BottomSheet
-                    snapPoints={snapPoints}
-                    backgroundComponent={CustomBackground}
-                    backdropComponent={BottomSheetBackdrop}
-                    handleComponent={Handle}
-                    ref={bottomSheet}
-                    index={0}
-                    onChange={(index) => {
-                        if (index === 0) bottomSheet.current.close();
-                    }}
-                >
-                    <ScrollView>
-                        <RadioButton.Group onValueChange={async (value) => {
-                            const theme = value === "light" ? "light" : value === "dark" ? "dark" : "system-preference";
-                            setTheme(theme);
-                            bottomSheet.current.close();
-                            await AsyncStorage.setItem("theme", theme);
-                        }} value={theme}>
-                            <RadioButton.Item label={"Use system preference"} value={"system-preference"} />
-                            <RadioButton.Item label={"Light theme"} value={"light"} />
-                            <RadioButton.Item label={"Dark theme"} value={"dark"} />
-                        </RadioButton.Group>
-                    </ScrollView>
-                </BottomSheet>
-            </Portal>
+            <BottomSheetModal
+                snapPoints={snapPoints}
+                backgroundComponent={CustomBackground}
+                backdropComponent={BottomSheetBackdrop}
+                handleComponent={Handle}
+                ref={bottomSheet}
+            >
+                <ScrollView>
+                    <RadioButton.Group onValueChange={async (value) => {
+                        const theme = value === "light" ? "light" : value === "dark" ? "dark" : "system-preference";
+                        setTheme(theme);
+                        bottomSheet.current.close();
+                        await AsyncStorage.setItem("theme", theme);
+                    }} value={theme}>
+                        <RadioButton.Item label={"Use system preference"} value={"system-preference"} />
+                        <RadioButton.Item label={"Light theme"} value={"light"} />
+                        <RadioButton.Item label={"Dark theme"} value={"dark"} />
+                    </RadioButton.Group>
+                </ScrollView>
+            </BottomSheetModal>
         </View>
     );
 };

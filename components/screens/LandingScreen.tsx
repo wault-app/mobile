@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import AccountItem from "@components/accounts/AccountItem";
 import CustomBackground from "@components/modal/CustomBackground";
 import { useKeycards } from "@components/providers/DataProvider";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Dimensions, RefreshControl, SectionList } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -26,8 +26,8 @@ const LandingScreen = (props: LandingScreenProps) => {
 
     const [account, setAccount] = useState<AccountType>();
 
-    const bottomSheet = useRef<BottomSheet>();
-    const snapPoints = useMemo(() => [0, 200, "80%"], []);
+    const sheet = useRef<BottomSheetModal>();
+    const snapPoints = useMemo(() => [200, "80%"], []);
 
     const layoutProvider = new LayoutProvider((index) => 1, (type, dim) => {
         dim.width = width;
@@ -36,7 +36,7 @@ const LandingScreen = (props: LandingScreenProps) => {
 
     useEffect(() => {
         const data = [];
-        for(const keycard of keycards) {
+        for (const keycard of keycards) {
             data.push(...keycard.safe.items);
         }
 
@@ -70,7 +70,7 @@ const LandingScreen = (props: LandingScreenProps) => {
                     item.type === "account" ? (
                         <AccountItem account={item} onOpenSheet={() => {
                             setAccount(item);
-                            bottomSheet.current.snapTo(1);
+                            sheet.current.present();
                         }} />
                     ) : (<List.Item
                         title={item.id}
@@ -79,42 +79,37 @@ const LandingScreen = (props: LandingScreenProps) => {
                     )
                 )}
             />
-            <Portal>
-                <BottomSheet
-                    snapPoints={snapPoints}
-                    ref={bottomSheet}
-                    backgroundComponent={CustomBackground}
-                    backdropComponent={BottomSheetBackdrop}
-                    handleComponent={Handle}
-                    onChange={(index) => {
-                        if (index === 0) bottomSheet.current.close();
-                    }}
-                >
-                    <ScrollView>
-                        {(account?.url || account?.platform) && (
-                            <OpenInBrowserButton
-                                url={`https://${account.platform}` || account.url}
-                            />
-                        )}
-                        {account?.username && (
-                            <CopyUsernameButton
-                                username={account.username}
-                                onCopy={() => {
-                                    bottomSheet.current.close();
-                                }}
-                            />
-                        )}
-                        {account?.password && (
-                            <CopyPasswordButton
-                                password={account.password}
-                                onCopy={() => {
-                                    bottomSheet.current.close();
-                                }}
-                            />
-                        )}
-                    </ScrollView>
-                </BottomSheet>
-            </Portal>
+            <BottomSheetModal
+                snapPoints={snapPoints}
+                ref={sheet}
+                backgroundComponent={CustomBackground}
+                backdropComponent={BottomSheetBackdrop}
+                handleComponent={Handle}
+            >
+                <ScrollView>
+                    {!!(account?.url || account?.platform) && (
+                        <OpenInBrowserButton
+                            url={`https://${account.platform}` || account.url}
+                        />
+                    )}
+                    {!!account?.username && (
+                        <CopyUsernameButton
+                            username={account.username}
+                            onCopy={() => {
+                                sheet.current.close();
+                            }}
+                        />
+                    )}
+                    {!!account?.password && (
+                        <CopyPasswordButton
+                            password={account.password}
+                            onCopy={() => {
+                                sheet.current.close();
+                            }}
+                        />
+                    )}
+                </ScrollView>
+            </BottomSheetModal>
         </Fragment>
     );
 };
