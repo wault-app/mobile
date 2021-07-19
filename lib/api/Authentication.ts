@@ -17,11 +17,9 @@ export default class Authentication {
      * @param username {string}  the username that the user want to reserve
      * @returns an `access_token`, a `refresh_token` and a message
      */
-    public static async register(username: string) {
+    public static async register(username: string, email: string) {
         type ResponseType = {
-            message: "successful_registration";
-            accessToken: string;
-            refreshToken: string;
+            message: "registration_email_sent";
         };
 
         const { publicKey } = await RSA.generate();
@@ -31,18 +29,32 @@ export default class Authentication {
                 username,
                 deviceName: Device.modelName,
                 rsaKey: publicKey,
+                email,
                 type: "MOBILE",
             }),
         });
 
-        if(!error) {
-            await Promise.all([
-                AccessToken.save(data.accessToken),
-                RefreshToken.save(data.refreshToken),
-            ]);
-        }
-
         return [data, error];
+    }
+
+    public static async verifyRegistration(id: string, secret: string) {
+        type ResponseType = {
+            message: "registration_email_sent";
+            accessToken: string;
+            refreshToken: string;
+        };
+
+        const [data, error] = await post<ResponseType>("/auth/register", {
+            body: JSON.stringify({
+                id,
+                secret,
+            }),
+        });
+
+        await Promise.all([
+            AccessToken.save(data.accessToken),
+            RefreshToken.save(data.refreshToken), 
+        ]);
     }
 
     /**
