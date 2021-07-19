@@ -44,12 +44,15 @@ export default class Authentication {
             refreshToken: string;
         };
 
-        const [data, error] = await post<ResponseType>("/auth/register", {
+        const [data, error] = await post<ResponseType>("/auth/register/verify", {
             body: JSON.stringify({
                 id,
                 secret,
             }),
         });
+
+        console.log(data);
+        console.error(error);
 
         await Promise.all([
             AccessToken.save(data.accessToken),

@@ -47,6 +47,7 @@
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
     "recyclerlistview": "^3.0.5",
+    "uri-scheme": "^1.0.91",
     "zod": "^3.2.0"
   },
   "devDependencies": {

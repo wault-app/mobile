@@ -6,6 +6,7 @@ export const API_ENDPOINT = "https://wault.app/api";
 
 const get = async <T = {}>(input: RequestInfo, init?: RequestInit): Promise<[T, WrapperError]> => {
     try {
+        console.log(`${API_ENDPOINT}${input}`);
         const resp = await fetch(`${API_ENDPOINT}${input}`, {
             ...init,
             headers: {
