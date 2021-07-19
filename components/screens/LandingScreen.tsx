@@ -12,6 +12,7 @@ import CopyPasswordButton from "@components/accounts/CopyPasswordButton";
 import OpenInBrowserButton from "@components/accounts/OpenInBrowserButton";
 import BottomSheet, { useBottomSheet } from "@components/modal/BottomSheet";
 import CreditCardItem from "@components/cards/CreditCardItem";
+import EmptyItemList from "./LandingScreen/EmptyItemList";
 
 export type LandingScreenProps = {};
 
@@ -41,42 +42,50 @@ const LandingScreen = (props: LandingScreenProps) => {
         setProvider(provider.cloneWithRows(data));
     }, [keycards]);
 
+    const refreshControl = (  
+        <RefreshControl
+            refreshing={refreshing}
+            onRefresh={async () => {
+                try {
+                    setRefreshing(true);
+                    await refresh();
+                } catch (e) {
+                    console.log(e);
+                }
+
+                setRefreshing(false);
+            }}
+        />
+    );
+
     return (
         <Fragment>
-            <RecyclerListView
-                style={{ flex: 1 }}
-                dataProvider={provider}
-                layoutProvider={layoutProvider}
-                scrollViewProps={{
-                    refreshControl: (
-                        <RefreshControl
-                            refreshing={refreshing}
-                            onRefresh={async () => {
-                                try {
-                                    setRefreshing(true);
-                                    await refresh();
-                                } catch (e) {
-                                    console.log(e);
-                                }
-
-                                setRefreshing(false);
-                            }}
-                        />
-                    ),
-                }}
-                rowRenderer={(index, item: ItemType) => (
-                    item.type === "account" ? (
-                        <AccountItem account={item} onOpenSheet={() => {
-                            setAccount(item);
-                            sheet.current.present();
-                        }} />
-                    ) : item.type === "credit-card" && (
-                        <CreditCardItem
-                            creditCard={item}
-                        />
-                    )
-                )}
-            />
+            {keycards.some((keycard) => keycard.safe.items.length > 0) ? (      
+                <RecyclerListView
+                    style={{ flex: 1 }}
+                    dataProvider={provider}
+                    layoutProvider={layoutProvider}
+                    scrollViewProps={{
+                        refreshControl,
+                    }}
+                    rowRenderer={(index, item: ItemType) => (
+                        item.type === "account" ? (
+                            <AccountItem account={item} onOpenSheet={() => {
+                                setAccount(item);
+                                sheet.current.present();
+                            }} />
+                        ) : item.type === "credit-card" && (
+                            <CreditCardItem
+                                creditCard={item}
+                            />
+                        )
+                    )}
+                />
+            ) : (
+                <EmptyItemList
+                    refreshControl={refreshControl}
+                />
+            )}
             <BottomSheet
                 snapPoints={snapPoints}
                 ref={sheet}
