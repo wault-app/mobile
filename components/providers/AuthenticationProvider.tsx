@@ -23,17 +23,26 @@ const AuthenticationProvider = ({ children }: AuthenticationProviderProps) => {
     const [isLoading, setLoading] = useState(true);
 
     const processVerification = async (url?: string) => {
-        const initialUrl = await Linking.getInitialURL() || url;
+        try {
+            const initialUrl = await Linking.getInitialURL() || url;
 
-        if (initialUrl) {
-            const url = initialUrl.replace("wault-auth://", "");
-            const [id, secret] = url.split(":");
-            
-            await Authentication.verifyRegistration(id, secret);
+            if (initialUrl) {
+                const url = initialUrl.replace("wault-auth://", "");
+                const [id, secret] = url.split(":");
+                
+                await Authentication.verifyRegistration(id, secret);
+                const user = await User.load();
+    
+                setUser(user);
+                setLoading(false);
+            }
+        } catch {
             const user = await User.load();
-
-            setUser(user);
-            setLoading(false);
+    
+            if(user) {
+                setUser(user);
+                setLoading(false);
+            }
         }
     };
 

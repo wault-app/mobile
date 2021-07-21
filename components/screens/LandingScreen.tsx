@@ -35,6 +35,7 @@ const LandingScreen = (props: LandingScreenProps) => {
 
     useEffect(() => {
         const data = [];
+
         for (const keycard of keycards) {
             data.push(...keycard.safe.items);
         }
