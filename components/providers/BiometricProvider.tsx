@@ -3,7 +3,7 @@ import AppLoading from "expo-app-loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ScrollView } from "react-native-gesture-handler";
 import * as LocalAuthentication from 'expo-local-authentication';
-import { ActivityIndicator, Button, Subheading, Text } from "react-native-paper";
+import { ActivityIndicator, Button, Subheading, Text, useTheme } from "react-native-paper";
 import { StatusBar, StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useEffect } from "react";
@@ -54,7 +54,11 @@ const BiometricProvider = (props: BiometricProviderProps) => {
     };
 
     useEffect(() => {
-        if(isEnabled && hasPassed !== true) startAuthentication();
+        if(isEnabled && hasPassed !== true) {
+            setTimeout(() => {
+                startAuthentication();
+            }, 1000);
+        }
     }, [isEnabled]);
 
     if(isEnabled === null) {
@@ -81,6 +85,8 @@ const BiometricProvider = (props: BiometricProviderProps) => {
 };
 
 const AuthenticationScreen = (props: { state: "LOCKED" | "FAILED"; retry: () => void }) => {
+    const theme = useTheme();
+
     return (
         <ScrollView>
             <View
@@ -89,7 +95,7 @@ const AuthenticationScreen = (props: { state: "LOCKED" | "FAILED"; retry: () => 
                 <Icon
                     name={props.state === "LOCKED" ? "account-lock" : "account-remove"}
                     size={64}
-                    color="#000"
+                    color={theme.colors.text}
                 />
             </View>
             <Text style={styles.text}>
