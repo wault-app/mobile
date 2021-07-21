@@ -5,6 +5,7 @@ export type UserType = {
     id: string;
     username: string;
     deviceid: string;
+    email: string;
 };
 
 export default class User {
@@ -21,6 +22,7 @@ export default class User {
             id: token.id,
             username: token.username,
             deviceid: token.deviceid,
+            email: token.email,
         };
     } 
 }

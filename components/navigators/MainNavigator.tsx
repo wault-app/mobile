@@ -30,7 +30,7 @@ const MainNavigator = () => {
                 options={{
                     header: (props) => (
                         <Appbar.Header theme={{ colors: { primary: "#ffffff" } }}>
-                            <Appbar.Content title={user.username} />
+                            <Appbar.Content title={user.username} subtitle={user.email} />
                             <Appbar.Action icon="cog" onPress={() => props.navigation.navigate("options")} />
                         </Appbar.Header>
                     )
