@@ -50,9 +50,8 @@ export default class Authentication {
                 secret,
             }),
         });
-
-        console.log(data);
-        console.error(error);
+        
+        if(error) throw error;
 
         await Promise.all([
             AccessToken.save(data.accessToken),

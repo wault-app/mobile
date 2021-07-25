@@ -1,9 +1,9 @@
 import React from "react";
-import RemoteAuthenticationInstuctionsScreen from "@components/screens/authentication/RemoteAuthenticationInstuctionsScreen";
-import ScanRemoteAuthenticationScreen from "@components/screens/authentication/ScanRemoteAuthenticationScreen";
-import AuthenticationConfirmationScreen from "@components/screens/authentication/AuthenticationConfirmationScreen";
+import InstructionsAuthenticationScreen from "@components/screens/authentication/InstructionsAuthenticationScreen";
+import ScanAuthenticationScreen from "@components/screens/authentication/ScanAuthenticationScreen";
+import ConfirmAuthenticationScreen from "@components/screens/authentication/ConfirmAuthenticationScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import RemoteAuthenticationSuccessScreen from "@components/screens/authentication/RemoteAuthenticationSuccessScreen";
+import SuccessfulAuthenticationScreen from "@components/screens/authentication/SuccessfulAuthenticationScreen";
 
 const ScanFlowStack = createStackNavigator();
 export const RemoteAuthenticationWrapperStack = createStackNavigator();
@@ -29,7 +29,7 @@ const RemoteAuthenticationStack = (props: RemoteAuthenticationStackProps) => {
             />
             <ScanFlowStack.Screen
                 name={"RemoteAuthenticationSuccess"}
-                component={RemoteAuthenticationSuccessScreen}
+                component={SuccessfulAuthenticationScreen}
             />
         </RemoteAuthenticationWrapperStack.Navigator>
     );
@@ -44,15 +44,15 @@ const AuthFlowStack = () => {
         >
             <ScanFlowStack.Screen
                 name={"RemoteAuthenticationInstructions"}
-                component={RemoteAuthenticationInstuctionsScreen}
+                component={InstructionsAuthenticationScreen}
             />
             <ScanFlowStack.Screen
                 name={"RemoteAuthenticationScan"}
-                component={ScanRemoteAuthenticationScreen}
+                component={ScanAuthenticationScreen}
             />
             <ScanFlowStack.Screen
                 name={"RemoteAuthenticationConfirmation"}
-                component={AuthenticationConfirmationScreen}
+                component={ConfirmAuthenticationScreen}
             />
         </ScanFlowStack.Navigator>
     );

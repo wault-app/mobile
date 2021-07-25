@@ -3,9 +3,9 @@ import { StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, Title } from "react-native-paper";
 
-export type RemoteAuthenticationSuccessScreenProps = {};
+export type SuccessfulAuthenticationScreenProps = {};
 
-const RemoteAuthenticationSuccessScreen = (props: RemoteAuthenticationSuccessScreenProps) => {
+const SuccessfulAuthenticationScreen = (props: SuccessfulAuthenticationScreenProps) => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <Title style={styles.center}>
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default RemoteAuthenticationSuccessScreen;
+export default SuccessfulAuthenticationScreen;

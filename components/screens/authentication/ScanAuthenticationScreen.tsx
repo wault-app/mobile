@@ -7,9 +7,9 @@ import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export type ScanRemoteAuthenticationScreenProps = {};
+export type ScanAuthenticationScreenProps = {};
 
-const ScanRemoteAuthenticationScreen = (props: ScanRemoteAuthenticationScreenProps) => {
+const ScanAuthenticationScreen = (props: ScanAuthenticationScreenProps) => {
     const [hasPermission, setHasPermission] = useState<boolean>(null);
     const navigation = useNavigation();
 
@@ -57,4 +57,4 @@ const ScanRemoteAuthenticationScreen = (props: ScanRemoteAuthenticationScreenPro
     );
 };
 
-export default ScanRemoteAuthenticationScreen;
+export default ScanAuthenticationScreen;
