@@ -7,7 +7,7 @@ export type DeviceType = {
     name: string;
     loggedInAt: string;
     rsaKey: string;
-    type: "MOBILE" | "BROWSER" | "DESKTOP" | "CLI";
+    type: "MOBILE" | "WEB" | "DESKTOP" | "CLI";
 };
 
 export default class Device {

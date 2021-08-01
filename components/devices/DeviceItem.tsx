@@ -15,7 +15,7 @@ const DeviceItem = (props: DeviceItemProps) => {
             style={{ backgroundColor: theme.colors.surface }}
             title={props.device.name}
             description={`Logged in at ${new Date(props.device.loggedInAt).toLocaleDateString()}`}
-            left={p => <List.Icon {...p} icon={props.device.type === "BROWSER" ? "web" : props.device.type === "MOBILE" ? "cellphone" : "laptop"} />}>
+            left={p => <List.Icon {...p} icon={props.device.type === "WEB" ? "web" : props.device.type === "MOBILE" ? "cellphone" : "laptop"} />}>
             <List.Item
                 title={"Device name"}
                 description={props.device.name}    
