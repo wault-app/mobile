@@ -2,7 +2,9 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { Button, Paragraph, TextInput, Title } from "react-native-paper";
 import Authentication from "@lib/api/Authentication";
-import User, { UserType } from "@lib/api/User";
+import { UserType } from "@lib/api/User";
+import WrapperError from "@wault/error";
+import Toast from "react-native-toast-message";
 
 export type RegistrationScreenProps = {
     setUser: Dispatch<SetStateAction<UserType>>;
@@ -17,13 +19,21 @@ const RegistrationScreen = (props: RegistrationScreenProps) => {
     const register = async () => {
         setDisabled(true);
 
-        const [resp, error] = await Authentication.register(username, email);
+        try {
+            await Authentication.register(username, email);
 
-        if (error) {
-            setDisabled(false);
-            console.log(error);
-        } else {
             setSent(true);
+        } catch(e) {
+            if(e instanceof WrapperError) {
+                Toast.show({
+                    type: "error",
+                    text1: "Something went wrong!",
+                    text2: e.message,
+                })
+            }
+
+            setDisabled(false);
+            console.log(e);
         }
     };
 

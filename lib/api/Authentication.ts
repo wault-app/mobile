@@ -1,6 +1,5 @@
-import RefreshToken from "./RefreshToken";
 import * as Device from "expo-device";
-import AccessToken from "./AccessToken";
+import SessionToken from "./AccessToken";
 import EncryptionKey from "@lib/encryption/EncryptionKey";
 import post from "@lib/fetch/post";
 import KeyExchange from "./KeyExchange";
@@ -19,44 +18,45 @@ export default class Authentication {
      */
     public static async register(username: string, email: string) {
         type ResponseType = {
-            message: "registration_email_sent";
+            message: "confirmation_email_sent";
         };
 
         const { publicKey } = await RSA.generate();
 
-        const [data, error] = await post<ResponseType>("/auth/register", {
+        return await post<ResponseType>("/auth/register", {
             body: JSON.stringify({
                 username,
-                deviceName: Device.modelName,
-                rsaKey: publicKey,
                 email,
-                type: "MOBILE",
+                deviceName: Device.modelName,
+                deviceType: "MOBILE",
+                rsaKey: publicKey,
             }),
         });
-
-        return [data, error];
     }
 
     public static async verifyRegistration(id: string, secret: string) {
         type ResponseType = {
-            message: "registration_email_sent";
-            accessToken: string;
-            refreshToken: string;
+            message: "successful_registration";
+            sessionToken: string;
         };
 
-        const [data, error] = await post<ResponseType>("/auth/register/verify", {
+        const { message, sessionToken } = await post<ResponseType>("/auth/register/verify", {
             body: JSON.stringify({
                 id,
                 secret,
             }),
         });
-        
-        if(error) throw error;
 
-        await Promise.all([
-            AccessToken.save(data.accessToken),
-            RefreshToken.save(data.refreshToken), 
-        ]);
+        console.log({
+            message,
+            sessionToken,
+        });
+
+        await SessionToken.save(sessionToken);
+
+        return {
+            message,
+        };
     }
 
     /**
@@ -64,12 +64,9 @@ export default class Authentication {
      * @returns {boolean} `true` if logged in 
      */
     public static async isLoggedIn() {
-        const [accessToken, refreshToken] = await Promise.all([
-            AccessToken.get(),
-            RefreshToken.get(), 
-        ]);
+        const sessionToken = await SessionToken.get();
 
-        return !!accessToken && !!refreshToken;
+        return !!sessionToken;
     }
 
     /**
@@ -79,12 +76,11 @@ export default class Authentication {
      */
     public static async scan(code: string) {    
         type ResponseType = {
-            message: "successfully_scanned_authentication_code";
-            rsa: string;
-            username: string;
+            message: "remote_auth_successful_scan";
+            rsaKey: string;
         };
 
-        return await post<ResponseType>("/auth/qr/scan", {
+        return await post<ResponseType>("/auth/remote/scan", {
             body: JSON.stringify({
                 id: code,
             }),
@@ -99,7 +95,7 @@ export default class Authentication {
      */
     public static async send(code: string, publicKey: string) {
         type ResponseType = {
-            message: "successfully_sent_authentication_data",
+            message: "remote_auth_success",
         };
 
         // check if there is new keys to be exchanged
@@ -109,20 +105,20 @@ export default class Authentication {
         const keys = await EncryptionKey.getAll();
         
         // encrypt the currently stored keys
-        const encryptedKeys = await Promise.all(
+        const exchanges = await Promise.all(
             Object.keys(keys).map(
                 async (key) => ({
                     safeid: key,
-                    content: await RSA.encrypt(keys[key], publicKey),
+                    value: await RSA.encrypt(keys[key], publicKey),
                 })
             )
         );
 
         // create a request towards the server
-        return await post<ResponseType>("/auth/qr/send", {
+        return await post<ResponseType>("/auth/remote/send", {
             body: JSON.stringify({
                 id: code,
-                keys: encryptedKeys,
+                exchanges,
             }),
         });
     }

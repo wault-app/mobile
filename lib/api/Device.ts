@@ -1,12 +1,13 @@
 import get from "../fetch/get";
 import post from "../fetch/post";
+import { UserType } from "./User";
 
 export type DeviceType = {
     id: string;
     name: string;
-    loggedInAt: Date;
+    loggedInAt: string;
     rsaKey: string;
-    type: "MOBILE" | "BROWSER" | "DESKTOP";
+    type: "MOBILE" | "BROWSER" | "DESKTOP" | "CLI";
 };
 
 export default class Device {
@@ -15,26 +16,28 @@ export default class Device {
             devices: DeviceType[];
         };
 
-        const [resp, error] = await get<ResponseType>("/device/getAll");
-
-        if(error) throw error;
-
-        return resp;
+        return await get<ResponseType>("/device/getAll");
     }
 
-    public static async logout(device: DeviceType) {
+    public static async get() {
         type ResponseType = {
-            message: "successful_remote_logout";
+            device: DeviceType & {
+                user: UserType;
+            };
         };
 
-        const [resp, error] = await post<ResponseType>("/device/logout", {
+        return await get<ResponseType>("/device/get");
+    }
+
+    public static async logout({ id }: DeviceType) {
+        type ResponseType = {
+            message: "successful_logout";
+        };
+
+        return await post<ResponseType>("/device/logout", {
             body: JSON.stringify({
-                deviceid: device.id,
+                id,
             }),
-        });
-
-        if(error) throw error; 
-
-        return resp; 
+        }); 
     }
 }

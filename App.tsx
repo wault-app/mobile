@@ -14,16 +14,16 @@ enableScreens(true);
 export default function App() {
     return (
         <ThemeProvider>
+            <Portal>
+                <Toast
+                    position={"bottom"}
+                    ref={(ref) => Toast.setRef(ref)}
+                />
+            </Portal>
             <BottomSheetModalProvider>
                 <AuthenticationProvider>
                     <BiometricProvider>
                         <DataProvider>
-                            <Portal>
-                                <Toast
-                                    position={"bottom"}
-                                    ref={(ref) => Toast.setRef(ref)}
-                                />
-                            </Portal>
                             <MainNavigator />
                         </DataProvider>
                     </BiometricProvider>

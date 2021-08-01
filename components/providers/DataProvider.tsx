@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, PropsWithChildren } from "react";
 import ErrorScreen from "@components/screens/ErrorScreen";
 import Safe, { KeycardType } from "@lib/api/Safe";
-import WrapperError from "@lib/errors/WrapperError";
+import WrapperError from "@wault/error";
 import AppLoading from "expo-app-loading";
 
 type DataContextType = {
@@ -43,6 +43,9 @@ const DataProvider = (props: DataProviderProps) => {
             setError(e);
         }
     };
+
+    console.log("/////");
+    console.log(error);
     
     if(error) {
         return (

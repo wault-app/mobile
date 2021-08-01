@@ -10,54 +10,31 @@ export default class KeyExchange {
      */
     public static async getAll() {
         type ResponseType = {
-            exchanges: ({
-                safeid: string;
-                content: string;
+            keyExchanges: ({
+                safeId: string;
+                value: string;
             })[];
         };
 
         const privateKey = await RSA.load();
 
-        const [resp, error] = await get<ResponseType>("/key-exchanges/get");
-
-        if(error) return [, error];
+        const resp = await get<ResponseType>("/key-exchange/getAll");
 
         const data = await Promise.all(
-            resp.exchanges.map(
+            resp.keyExchanges.map(
                 async (exchange) => ({
-                    safeid: exchange.safeid,
-                    content: await RSA.decrypt(exchange.content, privateKey),
+                    safeid: exchange.safeId,
+                    value: await RSA.decrypt(exchange.value, privateKey),
                 })
             )
         );
 
-        console.log(data);
+        console.log(resp.keyExchanges.map((e) => e.safeId));
 
         await Promise.all(data.map(async (el) => {
-            await EncryptionKey.save(el.safeid, el.content);
+            await EncryptionKey.save(el.safeid, el.value);
         }));
 
-        return [data];
-    }
-
-    /**
-     * Sends the rsa-encrypted(!) key to the remote server  
-     * @param deviceid to which device we want to send the key
-     * @param safeid for which safe the key should be used for
-     * @param content the encrypted key for the safe
-     * @returns a message saying successfuly key exchange
-     */
-    public static async send(deviceid: string, safeid: string, content: string) {
-        type ResponseType = {
-            message: "successfully_sent_key_exchange",
-        };
-
-        return await post<ResponseType>("/key-exchanges/send", {
-            body: JSON.stringify({
-                deviceid,
-                safeid,
-                content,
-            }),
-        });
+        return data;
     }
 }

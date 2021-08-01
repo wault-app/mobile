@@ -19,14 +19,13 @@ const ConfirmAuthenticationScreen = (props: ConfirmAuthenticationScreenProps) =>
     const { user } = useUser();
 
     const load = async () => {
-        const [{ rsa }, error] = await Authentication.scan(code);
-
-        if(error) {
+        try {
+            const { rsaKey } = await Authentication.scan(code);
+    
+            setRsaKey(rsaKey);
+        } catch(e) {
             navigation.goBack();
-            return;
         }
-
-        setRsaKey(rsa);
     };
 
     const send = async () => {

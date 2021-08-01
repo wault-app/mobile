@@ -14,6 +14,7 @@
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
+    "@wault/error": "git+https://github.com/wault-app/error.git",
     "aes-js": "^3.1.2",
     "babel-plugin-module-resolver": "^4.1.0",
     "crypto-js": "3.3.0",

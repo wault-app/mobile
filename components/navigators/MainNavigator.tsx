@@ -6,6 +6,7 @@ import OptionsScreen from "@components/screens/OptionsScreen";
 import { Appbar, Avatar, Title } from "react-native-paper";
 import { useUser } from "@components/providers/AuthenticationProvider";
 import AccountScreen from "@components/screens/AccountScreen";
+import CreditCardScreen from "@components/screens/CreditCardScreen";
 
 const MainStack = createStackNavigator();
 
@@ -43,6 +44,10 @@ const MainNavigator = () => {
             <MainStack.Screen
                 name={"account-info"}
                 component={AccountScreen}
+            />
+            <MainStack.Screen
+                name={"credit-card"}
+                component={CreditCardScreen}
             />
             <MainStack.Screen
                 name={"remote-authentication"}

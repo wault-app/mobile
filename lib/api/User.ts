@@ -1,11 +1,16 @@
-import AccessToken from "./AccessToken";
-import jwt_decode from "jwt-decode";
+import get from "@lib/fetch/get";
+import SessionToken from "./AccessToken";
 
 export type UserType = {
     id: string;
     username: string;
-    deviceid: string;
     email: string;
+    icon?: IconType;
+};
+
+export type IconType = {
+    type: "EMOJI" | "IMAGE";
+    value: string;
 };
 
 export default class User {
@@ -13,16 +18,7 @@ export default class User {
      * Loads the user from the stored `access_token`
      * @returns an object containing data about the user
      */
-    public static async load(): Promise<UserType> {
-        const token = jwt_decode<UserType>(await AccessToken.get());
-
-        if(typeof token === "string") return;
-
-        return {
-            id: token.id,
-            username: token.username,
-            deviceid: token.deviceid,
-            email: token.email,
-        };
+    public static async get() {
+        return await get<UserType>("/user/me");
     } 
 }

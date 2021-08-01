@@ -1,11 +1,9 @@
-import WrapperError, { errors } from "@lib/errors/WrapperError";
-import RefreshToken from "@lib/api/RefreshToken";
-import AccessToken from "@lib/api/AccessToken";
+import WrapperError, { errors } from "@wault/error";
+import SessionToken from "@lib/api/AccessToken";
 
-export const API_ENDPOINT = "https://wault.app/api";
+export const API_ENDPOINT = "https://api.wault.app";
 
-const get = async <T = {}>(input: RequestInfo, init?: RequestInit): Promise<[T, WrapperError]> => {
-    try {
+const get = async <T = {}>(input: RequestInfo, init?: RequestInit): Promise<T> => {
         console.log(`${API_ENDPOINT}${input}`);
         const resp = await fetch(`${API_ENDPOINT}${input}`, {
             ...init,
@@ -13,7 +11,7 @@ const get = async <T = {}>(input: RequestInfo, init?: RequestInit): Promise<[T, 
                 "Accept": "application/json",
                 "Content-Type": "text/plain",
                 ...init?.headers,
-                "Authorization": `Bearer ${await AccessToken.get()}`
+                "Authorization": `Bearer ${await SessionToken.get()}`
             }
         });
 
@@ -21,20 +19,13 @@ const get = async <T = {}>(input: RequestInfo, init?: RequestInit): Promise<[T, 
 
         const data = await resp.json();
         if(data.error) {
-            if(data.message in errors) throw new WrapperError(data.message);
+            if(data.message in errors) throw new WrapperError(data.name);
             else throw new WrapperError("unexpected_error"); 
         }
 
-        return [data, null];
-    } catch(e) {
-        console.log(e);
-        if(e instanceof WrapperError && e.message === "jwt_token_expired") {
-            await RefreshToken.refresh();
-            return await get(input, init);
-        } else {
-            return [null, e];
-        }
-    }
+        console.log(data);
+
+        return data;
 };
 
 export default get;

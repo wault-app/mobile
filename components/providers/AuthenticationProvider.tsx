@@ -31,13 +31,13 @@ const AuthenticationProvider = ({ children }: AuthenticationProviderProps) => {
                 const [id, secret] = url.split(":");
                 
                 await Authentication.verifyRegistration(id, secret);
-                const user = await User.load();
+                const user = await User.get();
     
                 setUser(user);
                 setLoading(false);
             }
         } catch {
-            const user = await User.load();
+            const user = await User.get();
     
             if(user) {
                 setUser(user);
@@ -49,7 +49,7 @@ const AuthenticationProvider = ({ children }: AuthenticationProviderProps) => {
     Linking.addListener("url", async ({ url }) => processVerification(url));
 
     const load = async () => {
-        const user = await User.load();
+        const user = await User.get();
         console.log(user);
         setUser(user);
         setLoading(false);

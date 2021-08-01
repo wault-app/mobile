@@ -4,11 +4,8 @@ import KeyExchange from "@lib/api/KeyExchange";
 import Safe from "@lib/api/Safe";
 
 export default class EncryptionKey {
-    public static async generate(safeid: string) {
-        const secret = await Secret.generate();
-        await this.save(safeid, secret);
-
-        return secret;
+    public static async generate() {
+        return await Secret.generate();
     }
 
     public static async save(safeid: string, content: string) {
@@ -30,6 +27,8 @@ export default class EncryptionKey {
     public static async get(vaultid: string): Promise<string> {
         const key = await SecureStore.getItemAsync(`safe_encryption_key_${vaultid}`);
         if(key) return key;
+
+        console.log(vaultid);
 
         await KeyExchange.getAll();
         return await this.get(vaultid);

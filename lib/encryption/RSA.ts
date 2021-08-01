@@ -2,6 +2,7 @@ import SecureStore from "@lib/api/SecureStore";
 import Forge from "node-forge";
 import modPow from "react-native-modpow";
 
+// optimization (as RSA key generation would freeze the UI)
 Forge.jsbn.BigInteger.prototype.modPow = function nativeModPow(e, m) {
     const result = modPow({
         target: this.toString(16),

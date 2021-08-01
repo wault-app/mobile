@@ -1,13 +1,12 @@
+import post from "../fetch/post";
 import get from "../fetch/get";
-import SecureStore from "./SecureStore";
-import WrapperError from "@lib/errors/WrapperError";
-import KeyExchange from "./KeyExchange";
-import EncryptionKey from "@lib/encryption/EncryptionKey";
-import AES from "@lib/encryption/AES";
-import post from "@lib/fetch/post";
-import { EncryptedItemType, ItemType } from "./Item";
+import EncryptionKey from "../encryption/EncryptionKey";
+import AES from "../encryption/AES";
 import Device from "./Device";
-import RSA from "@lib/encryption/RSA";
+import KeyExchange from "./KeyExchange";
+import { EncryptedItemType, ItemType } from "./Item";
+import RSA from "../encryption/RSA";
+import SecureStore from "./SecureStore";
 
 export type RoleType = "OWNER" | "WRITER" | "READER";
 
@@ -36,107 +35,104 @@ type EncryptedKeycardType = {
 };
 
 export default class Safe {
-    /**
-     * Create a new safe and the AES key to every connected device of yours  
-     * @param name {string} the name of the safe
-     * @returns the content of the newly created safe 
-     */
-    public static async crate(name: string) {
+    public static async getAll(force: boolean = false): Promise<KeycardType[]> {
         type ResponseType = {
-            message: "successfully_created_safe",
-            keycard: KeycardType;
+            keycards: EncryptedKeycardType[];
         };
 
-        const [{ keycard }, error] = await post<ResponseType>("/safe/create", {
-            body: JSON.stringify({
-                name,
-            }),
-        });
+        const stored = await SecureStore.getItemAsync("stored_keycards_data");
 
-        if (error) throw error;
+        const decryptKeycards = async (keycards: EncryptedKeycardType[]) => await Promise.all(
+            keycards.map(
+                async (keycard) => await this.decrypt(keycard),
+            )
+        );
 
-        // We're generating and storing an encryption key for the safe
-        const secret = await EncryptionKey.generate(keycard.safe.id);
+        if(!stored || force) {
+            // query the key exchanges to get all the encryption keys
+            await KeyExchange.getAll();
+
+            // query the keycard data from the server
+            const resp = await get<ResponseType>("/keycard/getAll");
+
+            // store the data from the server insider secure store
+            await SecureStore.setItemAsync("stored_keycards_data", JSON.stringify(resp));
+
+            // decrypt all keycard with their corresponding decryption key
+            return await decryptKeycards(resp.keycards);
+        } else {
+            const { keycards } = JSON.parse(stored);
+
+            return await decryptKeycards(keycards);
+        }
+        
+    }
+
+    private static async decrypt(keycard: EncryptedKeycardType): Promise<KeycardType> {
+        const key = new AES(await EncryptionKey.get(keycard.safe.id));
+        
+        return {
+            ...keycard,
+            safe: {
+                ...keycard.safe,
+                name: key.decrypt(keycard.safe.name),
+                items: await Promise.all(
+                    keycard.safe.items.map(
+                        async (item) => ({
+                            ...item,
+                            ...JSON.parse(key.decrypt(item.data)),
+                        })
+                    )
+                ),
+            },
+        };
+    }
+
+    public static async create(name: string) {
+        type ResponseType = {
+            message: "keycard_create_success";
+            keycard: EncryptedKeycardType;
+        };
+
+        // generate encryption key
+        const key = await EncryptionKey.generate();
+
+        // encrypt the safe name
+        const encryptor = new AES(key);
+        const encryptedName = encryptor.encrypt(name);
 
         // query all of our devices
         const { devices } = await Device.getAll();
 
-        // send the new encryption key to all device
-        await Promise.all(
-            devices.map(
-                async (device) => {
-                    return await KeyExchange.send(
-                        keycard.safe.id,
-                        device.id,
-                        await RSA.encrypt(secret, device.rsaKey),
-                    );
-                }
-            )
-        );
-
-    }
-
-    /**
-     * Loads the data from our local storage
-     * @returns an object containing all the keycards
-     */
-    private static async getFromLocal(): Promise<EncryptedKeycardType[]> {
-        const data = await SecureStore.getItemAsync("safe_storage");
-        if (!data) return;
-
-        return JSON.parse(data);
-    }
-
-    /**
-     * Gets all the stored safes but not decrypt them
-     * @param force if true we will query it from the server, if false then we only query it from the server if necessary (not stored locally yet)
-     * @returns an array of the safes
-     */
-    private static async load(force: boolean = false): Promise<EncryptedKeycardType[]> {
-        const stored = await this.getFromLocal();
-
-        if (force || !stored) {
-            const [{ keycards }, error] = await get<{ keycards: EncryptedKeycardType[] }>("/safe/get");
-            if (error) throw error;
-
-            await SecureStore.setItemAsync("safe_storage", JSON.stringify(keycards));
-            return keycards;
-        }
-
-        return stored;
-    }
-
-    /**
-     * Gets the all of the safes' content from both `SecureStore` and remote server (optional) 
-     * @param force if we should query from the server when we already have data locally
-     * @returns an array of decrypted safe
-     */
-    public static async getAll(force: boolean = false): Promise<KeycardType[]> {
-        const keycards = await this.load(force);
-
-        return await Promise.all(
-            keycards.map(
-                async (keycard) => {
-                    const secret = await EncryptionKey.get(keycard.safe.id);
-
-                    return {
-                        ...keycard,
-                        safe: {
-                            ...keycard.safe,
-                            name: AES.decrypt(keycard.safe.name, secret),
-                            items: keycard.safe.items.map(
-                                (item) => (
-                                    {
-                                        ...item,
-                                        ...JSON.parse(AES.decrypt(item.data, secret)),
-                                    }
-                                )
-                            )
-
+        // create the safe on the server
+        const { keycard, message } = await post<ResponseType>("/safe/create", {
+            body: JSON.stringify({
+                name: encryptedName,
+                keyExchanges: await Promise.all(
+                    devices.map(
+                        async (device) => {
+                            const value = await RSA.encrypt(key, device.rsaKey);
+                            
+                            return {
+                                deviceid: device.id,
+                                value,
+                            };
                         }
-                    };
-                }
-            )
-        )
+                    )
+                )
+            })
+        });
+
+        // save the encryption key to local storage
+        await EncryptionKey.save(keycard.safe.id, key);
+
+        // decrypt the remote data
+        const decrypted = await this.decrypt(keycard);
+
+        // send back the new keycard object to be stored in a context
+        return {
+            message,
+            keycard: decrypted,
+        };
     }
 }

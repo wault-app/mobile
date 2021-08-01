@@ -1,5 +1,5 @@
 import React from "react";
-import WrapperError from "@lib/errors/WrapperError";
+import WrapperError from "@wault/error";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text } from "react-native-paper";
 
