@@ -58,7 +58,7 @@ export default class Item {
         const data = key.encrypt(JSON.stringify(item));
 
         // send the encrypted data to the server 
-        const resp = await post<ResponseType>("/item/create", {
+        const resp = await post<ResponseType>("/item", {
             body: JSON.stringify({
                 safeid: safe.id,
                 data,
@@ -76,7 +76,7 @@ export default class Item {
 
     public static async edit(item: ItemType, safe: SafeType, newData: ItemTypeWithoutID): Promise<{ message: string; item: ItemType; }> {
         type ResponseType = {
-            message: "item_edit_success";
+            message: "Item successfully updated!";
             item: EncryptedItemType;
         };
 
@@ -86,10 +86,9 @@ export default class Item {
         // encrypt the given data
         const data = key.encrypt(JSON.stringify(item));
 
-        const resp = await post<ResponseType>("/item/edit", {
+        const resp = await post<ResponseType>(`/item/${item.id}`, {
             method: "PUT", 
             body: JSON.stringify({
-                id: item.id,
                 data,
             }),
         });
@@ -105,14 +104,11 @@ export default class Item {
 
     public static async delete(item: ItemType) {
         type ResponseType = {
-            message: "item_delete_success";
+            message: "Item successfully deleted!";
         };
 
-        return await post<ResponseType>("/item/delete", {
-            body: JSON.stringify({
-                method: "DELETE", 
-                id: item.id,
-            }),
+        return await post<ResponseType>(`/item/${item.id}`, {
+            method: "DELETE", 
         });
     }
 }

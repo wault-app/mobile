@@ -53,7 +53,7 @@ export default class Safe {
             await KeyExchange.getAll();
 
             // query the keycard data from the server
-            const resp = await get<ResponseType>("/keycard/getAll");
+            const resp = await get<ResponseType>("/safe");
 
             // store the data from the server insider secure store
             await SecureStore.setItemAsync("stored_keycards_data", JSON.stringify(resp));
@@ -105,7 +105,7 @@ export default class Safe {
         const { devices } = await Device.getAll();
 
         // create the safe on the server
-        const { keycard, message } = await post<ResponseType>("/safe/create", {
+        const { keycard, message } = await post<ResponseType>("/safe", {
             body: JSON.stringify({
                 name: encryptedName,
                 keyExchanges: await Promise.all(

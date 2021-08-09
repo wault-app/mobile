@@ -36,7 +36,7 @@ const AuthenticationProvider = ({ children }: AuthenticationProviderProps) => {
                 setUser(user);
                 setLoading(false);
             }
-        } catch {
+        } catch(e) {
             const user = await User.get();
     
             if(user) {
@@ -46,11 +46,11 @@ const AuthenticationProvider = ({ children }: AuthenticationProviderProps) => {
         }
     };
 
+    Linking.removeAllListeners("url");
     Linking.addListener("url", async ({ url }) => processVerification(url));
 
     const load = async () => {
         const user = await User.get();
-        console.log(user);
         setUser(user);
         setLoading(false);
     };

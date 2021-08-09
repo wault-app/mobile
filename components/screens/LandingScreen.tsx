@@ -6,6 +6,7 @@ import { ItemType } from "@lib/api/Item";
 import { DataProvider, LayoutProvider, RecyclerListView } from "recyclerlistview";
 import CreditCardItem from "@components/cards/CreditCardItem";
 import EmptyItemList from "./LandingScreen/EmptyItemList";
+import Toast from "react-native-toast-message";
 
 export type LandingScreenProps = {};
 
@@ -39,7 +40,11 @@ const LandingScreen = (props: LandingScreenProps) => {
                     setRefreshing(true);
                     await refresh();
                 } catch (e) {
-                    console.log(e);
+                    Toast.show({
+                        type: "error",
+                        text1: "Something went wrong!",
+                        text2: e.message,
+                    });
                 }
 
                 setRefreshing(false);

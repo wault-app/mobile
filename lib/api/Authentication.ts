@@ -36,7 +36,7 @@ export default class Authentication {
 
     public static async verifyRegistration(id: string, secret: string) {
         type ResponseType = {
-            message: "successful_registration";
+            message: "Successfully verified your email address!";
             sessionToken: string;
         };
 
@@ -45,11 +45,6 @@ export default class Authentication {
                 id,
                 secret,
             }),
-        });
-
-        console.log({
-            message,
-            sessionToken,
         });
 
         await SessionToken.save(sessionToken);
@@ -105,7 +100,7 @@ export default class Authentication {
         const keys = await EncryptionKey.getAll();
         
         // encrypt the currently stored keys
-        const exchanges = await Promise.all(
+        const keyExchanges = await Promise.all(
             Object.keys(keys).map(
                 async (key) => ({
                     safeid: key,
@@ -118,7 +113,7 @@ export default class Authentication {
         return await post<ResponseType>("/auth/remote/send", {
             body: JSON.stringify({
                 id: code,
-                exchanges,
+                keyExchanges,
             }),
         });
     }

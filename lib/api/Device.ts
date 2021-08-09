@@ -7,7 +7,7 @@ export type DeviceType = {
     name: string;
     loggedInAt: string;
     rsaKey: string;
-    type: "MOBILE" | "WEB" | "DESKTOP" | "CLI";
+    type: "MOBILE" | "BROWSER" | "DESKTOP" | "CLI";
 };
 
 export default class Device {
@@ -16,19 +16,9 @@ export default class Device {
             devices: DeviceType[];
         };
 
-        return await get<ResponseType>("/device/getAll");
+        return await get<ResponseType>("/device");
     }
-
-    public static async get() {
-        type ResponseType = {
-            device: DeviceType & {
-                user: UserType;
-            };
-        };
-
-        return await get<ResponseType>("/device/get");
-    }
-
+    
     public static async logout({ id }: DeviceType) {
         type ResponseType = {
             message: "successful_logout";

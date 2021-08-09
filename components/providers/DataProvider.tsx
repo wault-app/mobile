@@ -43,9 +43,6 @@ const DataProvider = (props: DataProviderProps) => {
             setError(e);
         }
     };
-
-    console.log("/////");
-    console.log(error);
     
     if(error) {
         return (

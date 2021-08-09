@@ -28,8 +28,6 @@ export default class EncryptionKey {
         const key = await SecureStore.getItemAsync(`safe_encryption_key_${vaultid}`);
         if(key) return key;
 
-        console.log(vaultid);
-
         await KeyExchange.getAll();
         return await this.get(vaultid);
     }

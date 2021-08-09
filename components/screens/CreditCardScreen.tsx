@@ -12,8 +12,6 @@ export type CreditCardScreenProps = {
 
 const CreditCardScreen = (props: CreditCardScreenProps) => {
     const { creditCard } = props.route.params;
-
-    console.log(creditCard);
     
     return (
         <ScrollView>

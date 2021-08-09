@@ -5,6 +5,7 @@ import Authentication from "@lib/api/Authentication";
 import { UserType } from "@lib/api/User";
 import WrapperError from "@wault/error";
 import Toast from "react-native-toast-message";
+import { openInbox } from "react-native-email-link";
 
 export type RegistrationScreenProps = {
     setUser: Dispatch<SetStateAction<UserType>>;
@@ -47,6 +48,13 @@ const RegistrationScreen = (props: RegistrationScreenProps) => {
                 <Paragraph style={[styles.row]}>
                     Check your inbox for an email from Wault to verify your email address!
                 </Paragraph>
+                <Button 
+                    style={[styles.row]}
+                    mode={"outlined"}
+                    onPress={() => openInbox()}
+                >
+                    Open Email app
+                </Button>
             </View>
         );
     }
