@@ -1,6 +1,7 @@
 import { useKeycards } from "@components/providers/DataProvider";
 import color from "color";
 import React from "react";
+import { useMemo } from "react";
 import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { List, Paragraph, RadioButton, TextInput, useTheme } from "react-native-paper";
@@ -11,13 +12,14 @@ const SafeSelector = (props: SafeSelectorProps) => {
     const { keycards } = useKeycards();
     const theme = useTheme();
 
-    return (
+    const backgroundColor = useMemo(() => theme.dark
+      ? color(theme.colors.background).lighten(0.24).rgb().string()
+      : color(theme.colors.background).darken(0.06).rgb().string(), [theme]);
+    
+      return (
         <View
             style={{
-                backgroundColor: theme.dark
-                    ? color(theme.colors.background).lighten(0.24).rgb().string()
-                    : color(theme.colors.background).darken(0.06).rgb().string(),
-                borderTopLeftRadius: theme.roundness,
+                backgroundColor,borderTopLeftRadius: theme.roundness,
                 borderTopRightRadius: theme.roundness,
                 borderBottomColor: theme.colors.disabled,
                 borderBottomWidth: 1,
@@ -28,7 +30,7 @@ const SafeSelector = (props: SafeSelectorProps) => {
                 marginLeft: 16,
                 paddingTop: 12,
                 marginBottom: 8,
-            }]}>Two factor authentication</Paragraph>
+            }]}>Safe</Paragraph>
 
 
             <RadioButton.Group

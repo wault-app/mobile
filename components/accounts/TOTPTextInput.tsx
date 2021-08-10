@@ -18,6 +18,10 @@ const TOTPTextInput = (props: TOTPTextInputProps) => {
 
     const [open, setOpen] = useState(false);
 
+    const backgroundColor = useMemo(() => theme.dark
+      ? color(theme.colors.background).lighten(0.24).rgb().string()
+      : color(theme.colors.background).darken(0.06).rgb().string(), [theme]);
+
     useEffect(() => {
         const interval = setInterval(() => {
             setDate(new Date());
@@ -54,9 +58,7 @@ const TOTPTextInput = (props: TOTPTextInputProps) => {
     return (
         <View
             style={{
-                backgroundColor: theme.dark
-                    ? color(theme.colors.background).lighten(0.24).rgb().string()
-                    : color(theme.colors.background).darken(0.06).rgb().string(),
+                backgroundColor,
                 borderTopLeftRadius: theme.roundness,
                 borderTopRightRadius: theme.roundness,
                 borderBottomColor: theme.colors.disabled,
