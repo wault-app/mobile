@@ -8,8 +8,8 @@ import { useUser } from "@components/providers/AuthenticationProvider";
 import AccountScreen from "@components/screens/AccountScreen";
 import CreditCardScreen from "@components/screens/CreditCardScreen";
 import SelectItemTypeScreen from "@components/screens/SelectItemTypeScreen";
-import CreateAccountScreen from "@components/screens/add-item/CreateAccountScreen";
-import SearchPlatformScreen from "@components/screens/add-item/SelectPlatformScreen";
+import CreateAccountScreen from "@components/screens/CreateAccountScreen";
+import SearchPlatformScreen from "@components/screens/SelectPlatformScreen";
 
 const MainStack = createStackNavigator();
 
