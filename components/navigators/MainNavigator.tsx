@@ -1,9 +1,9 @@
 import React from "react";
-import { createStackNavigator, Header } from "@react-navigation/stack";
-import LandingScreen from "@components/screens/LandingScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+import HomeScreen from "@components/screens/HomeScreen";
 import RemoteAuthenticationStack from "./RemoteAuthenticationStack";
 import OptionsScreen from "@components/screens/OptionsScreen";
-import { Appbar, Avatar, Title } from "react-native-paper";
+import { Appbar } from "react-native-paper";
 import { useUser } from "@components/providers/AuthenticationProvider";
 import AccountScreen from "@components/screens/AccountScreen";
 import CreditCardScreen from "@components/screens/CreditCardScreen";
@@ -29,8 +29,8 @@ const MainNavigator = () => {
             }}
         >
             <MainStack.Screen
-                name={"landing"}
-                component={LandingScreen}
+                name={"home"}
+                component={HomeScreen}
                 options={{
                     header: (props) => (
                         <Appbar.Header theme={{ colors: { primary: "#ffffff" } }}>

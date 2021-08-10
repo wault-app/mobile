@@ -5,15 +5,15 @@ import { Dimensions, RefreshControl, StyleSheet } from "react-native";
 import { ItemType } from "@lib/api/Item";
 import { DataProvider, LayoutProvider, RecyclerListView } from "recyclerlistview";
 import CreditCardItem from "@components/cards/CreditCardItem";
-import EmptyItemList from "./LandingScreen/EmptyItemList";
+import EmptyItemList from "../home/EmptyItemList";
 import Toast from "react-native-toast-message";
 import { FAB, List, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { KeycardType } from "@lib/api/Safe";
 
-export type LandingScreenProps = {};
+export type HomeScreenProps = {};
 
-const LandingScreen = (props: LandingScreenProps) => {
+const HomeScreen = (props: HomeScreenProps) => {
     const { width } = Dimensions.get("window");
     const theme = useTheme();
     const navigation = useNavigation();
@@ -124,4 +124,4 @@ const styles = StyleSheet.create({
     },
   })
   
-export default LandingScreen;
+export default HomeScreen;
