@@ -29,7 +29,11 @@ const categories = {
 export type CategoryType = keyof typeof categories;
 
 export default class Categories {
-    public static get() {
+    public static get(category: CategoryType) {
+        return categories[category];
+    }
+
+    public static getAll() {
         return categories;
     }
 }

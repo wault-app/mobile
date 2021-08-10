@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useState, PropsWithChildren } from "react";
 import ErrorScreen from "@components/screens/ErrorScreen";
-import Safe, { KeycardType } from "@lib/api/Safe";
+import Safe, { KeycardType, SafeType } from "@lib/api/Safe";
 import WrapperError from "@wault/error";
 import AppLoading from "expo-app-loading";
+import { ItemType } from "@lib/api/Item";
 
 type DataContextType = {
     keycards: KeycardType[];
@@ -20,6 +21,18 @@ export const useKeycards = () => {
         setKeycards([keycard, ...keycards]);
     };
 
+    const addItem = (safe: SafeType, item: ItemType) => {
+        const newKeycards = [...keycards];
+        
+        for(const keycard of newKeycards) {
+            if(keycard.safe.id === safe.id) {
+                keycard.safe.items.unshift(item);
+            }
+        }
+
+        setKeycards(newKeycards);
+    };
+
     const refresh = async () => {
         const keycards = await Safe.getAll(true);
         setKeycards(keycards);
@@ -29,6 +42,7 @@ export const useKeycards = () => {
         keycards,
         addKeycard,
         refresh,
+        addItem,
     };
 };
  

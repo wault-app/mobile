@@ -7,6 +7,9 @@ import { Appbar, Avatar, Title } from "react-native-paper";
 import { useUser } from "@components/providers/AuthenticationProvider";
 import AccountScreen from "@components/screens/AccountScreen";
 import CreditCardScreen from "@components/screens/CreditCardScreen";
+import SelectItemTypeScreen from "@components/screens/SelectItemTypeScreen";
+import CreateAccountScreen from "@components/screens/add-item/CreateAccountScreen";
+import SearchPlatformScreen from "@components/screens/add-item/SelectPlatformScreen";
 
 const MainStack = createStackNavigator();
 
@@ -36,6 +39,21 @@ const MainNavigator = () => {
                         </Appbar.Header>
                     )
                 }}
+            />
+            <MainStack.Screen
+                component={SelectItemTypeScreen}
+                name={"add-item"}
+            />
+            <MainStack.Screen
+                component={CreateAccountScreen}
+                name={"add-account"}
+            />
+            <MainStack.Screen
+                component={SearchPlatformScreen}
+                options={{
+                    headerShown: false,
+                }}
+                name={"search-platform"}
             />
             <MainStack.Screen
                 name={"options"}

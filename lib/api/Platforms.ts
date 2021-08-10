@@ -149,4 +149,8 @@ export default class Platforms {
             categories: [],
         };
     }
+
+    public static getAll() {
+        return PLATFORMS;
+    }
 }
