@@ -27,7 +27,7 @@ const TOTPTextInput = (props: TOTPTextInputProps) => {
     }, []);
 
     const code = useMemo(
-        () => TOTP.get(props.value),
+        () => props.value ? TOTP.get(new URL(props.value)) : "",
         [props.value, date.getMinutes(), Math.floor(date.getSeconds() / 30)]
     );
 
@@ -41,7 +41,7 @@ const TOTPTextInput = (props: TOTPTextInputProps) => {
             <Portal>
                 <BarCodeScanner
                     onBarCodeScanned={({ data }) => {
-                        if (props.onChangeText) props.onChangeText(new URL(data).searchParams.get("secret"));
+                        if (props.onChangeText) props.onChangeText(data);
                         setOpen(false);
                     }}
                     barCodeTypes={["qr"]}
@@ -86,6 +86,7 @@ const TOTPTextInput = (props: TOTPTextInputProps) => {
 
             {!!props.value && (
                 <TwoFactorProgressBar
+                    url={new URL(props.value)}
                     date={date}
                 />
             )}
@@ -93,11 +94,19 @@ const TOTPTextInput = (props: TOTPTextInputProps) => {
     );
 };
 
-export const TwoFactorProgressBar = ({ date }: { date: Date }) => (
-    <ProgressBar
-        progress={(30 - Math.abs(date.getSeconds() > 30 ? date.getSeconds() - 30 : date.getSeconds())) / 30}
-    />
-);
+export const TwoFactorProgressBar = ({ date, url }: { date: Date, url: URL }) => {
+    const period = parseInt(url.searchParams.get("period")) || 30;
+
+    const fraction = (n: number) => n - Math.floor(n);
+
+    const progress = 1 - fraction(date.getTime() / 1000 / period);
+
+    return (
+        <ProgressBar
+            progress={progress}
+        />
+    );
+}
 
 const styles = StyleSheet.create({
     label: {

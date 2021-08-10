@@ -9,6 +9,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import OpenInBrowserButton from "./OpenInBrowserButton";
 import CopyUsernameButton from "./CopyUsernameButton";
 import CopyPasswordButton from "./CopyPasswordButton";
+import ShowTOTPButton from "./ShowTOTPButton";
 
 export type AccountItemProps = {
     account: AccountType;
@@ -53,6 +54,11 @@ const AccountItem = (props: AccountItemProps) => {
                             onCopy={() => {
                                 sheet.current.close();
                             }}
+                        />
+                    )}
+                    {!!props.account?.totp && (
+                        <ShowTOTPButton
+                            secret={props.account.totp}
                         />
                     )}
                 </ScrollView>

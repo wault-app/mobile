@@ -11,6 +11,7 @@ import CopyUsernameButton from "@components/accounts/CopyUsernameButton";
 import CopyPasswordButton from "@components/accounts/CopyPasswordButton";
 import OpenInBrowserButton from "@components/accounts/OpenInBrowserButton";
 import ShowDescriptionButton from "@components/accounts/ShowDescriptionButton";
+import ShowTOTPButton from "@components/accounts/ShowTOTPButton";
 
 export type AccountScreenProps = {
     route: Route<"account-info", {
@@ -56,6 +57,11 @@ const AccountScreen = (props: AccountScreenProps) => {
                 {!!account.password && (
                     <CopyPasswordButton
                         password={account.password}
+                    />
+                )}
+                {!!account.totp && (
+                    <ShowTOTPButton
+                        secret={account.totp}
                     />
                 )}
                 {!!account.description && (

@@ -1,9 +1,14 @@
 import jsSHA from "jssha";
+import { URL } from "react-native-url-polyfill";
 
 export default class TOTP {
-    public static get(secret: string, expiry = 30, length = 6, now = new Date().getTime()) {
-        if(!secret) return "";
-        
+    public static get(url: URL, now = new Date().getTime()) {
+        if(!url) return "";
+
+        const secret = url.searchParams.get("secret");
+        const expiry = parseInt(url.searchParams.get("period")) || 30;
+        const length = parseInt(url.searchParams.get("digits")) || 6; 
+
         const key = this.base32tohex(secret);
         const epoch = Math.round(now / 1000.0);
         const time = this.leftpad(this.dec2hex(Math.floor(epoch / expiry)), 16, "0");
