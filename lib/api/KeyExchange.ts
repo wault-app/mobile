@@ -21,7 +21,7 @@ export default class KeyExchange {
         };
 
         const privateKey = await RSA.load();
-
+        
         const resp = await get<ResponseType>("/key-exchange");
 
         const data = await Promise.all(

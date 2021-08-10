@@ -71,7 +71,7 @@ const HomeScreen = (props: HomeScreenProps) => {
 
     return (
         <Fragment>
-            {keycards.some((keycard) => keycard.safe.items.length > 0) ? (      
+            {keycards.length > 0 ? (      
                 <RecyclerListView
                     style={{ flex: 1 }}
                     dataProvider={provider}

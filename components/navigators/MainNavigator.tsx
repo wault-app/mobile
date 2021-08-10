@@ -10,6 +10,7 @@ import CreditCardScreen from "@components/screens/CreditCardScreen";
 import SelectItemTypeScreen from "@components/screens/SelectItemTypeScreen";
 import CreateAccountScreen from "@components/screens/CreateAccountScreen";
 import SearchPlatformScreen from "@components/screens/SelectPlatformScreen";
+import CreateSafeScreen from "@components/screens/CreateSafeScreen";
 
 const MainStack = createStackNavigator();
 
@@ -47,6 +48,10 @@ const MainNavigator = () => {
             <MainStack.Screen
                 component={CreateAccountScreen}
                 name={"add-account"}
+            />
+            <MainStack.Screen
+                component={CreateSafeScreen}
+                name={"create-safe"}
             />
             <MainStack.Screen
                 component={SearchPlatformScreen}

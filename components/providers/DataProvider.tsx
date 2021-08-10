@@ -54,6 +54,8 @@ const DataProvider = (props: DataProviderProps) => {
         try {
             setKeycards(await Safe.getAll(false));
         } catch(e) {
+            setKeycards([]);
+            throw e;
             setError(e);
         }
     };

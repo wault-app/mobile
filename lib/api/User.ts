@@ -26,6 +26,7 @@ export default class User {
      */
     public static async get(): Promise<SessionTokenType> {
         const sessionToken = await SessionToken.get();
+        console.log(Buffer.from(sessionToken, "base64").toString("utf8"));
 
         if(!sessionToken) return null;
 

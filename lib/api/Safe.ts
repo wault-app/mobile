@@ -40,7 +40,15 @@ export default class Safe {
             keycards: EncryptedKeycardType[];
         };
 
-        const stored = await SecureStore.getItemAsync("stored_keycards_data");
+        const loadStored = async () => {
+            try {
+                return await SecureStore.getItemAsync("stored_keycards_data");
+            } catch {
+
+            }
+        };
+
+        const stored = await loadStored();
 
         const decryptKeycards = async (keycards: EncryptedKeycardType[]) => await Promise.all(
             keycards.map(
@@ -54,6 +62,7 @@ export default class Safe {
 
             // query the keycard data from the server
             const resp = await get<ResponseType>("/safe");
+            console.log(resp.keycards);
 
             // store the data from the server insider secure store
             await SecureStore.setItemAsync("stored_keycards_data", JSON.stringify(resp));
@@ -65,27 +74,30 @@ export default class Safe {
 
             return await decryptKeycards(keycards);
         }
-        
     }
 
     private static async decrypt(keycard: EncryptedKeycardType): Promise<KeycardType> {
-        const key = new AES(await EncryptionKey.get(keycard.safe.id));
+        try {
+            const key = new AES(await EncryptionKey.get(keycard.safe.id));
         
-        return {
-            ...keycard,
-            safe: {
-                ...keycard.safe,
-                name: key.decrypt(keycard.safe.name),
-                items: await Promise.all(
-                    keycard.safe.items.map(
-                        async (item) => ({
-                            ...item,
-                            ...JSON.parse(key.decrypt(item.data)),
-                        })
-                    )
-                ),
-            },
-        };
+            return {
+                ...keycard,
+                safe: {
+                    ...keycard.safe,
+                    name: key.decrypt(keycard.safe.name),
+                    items: await Promise.all(
+                        keycard.safe.items.map(
+                            async (item) => ({
+                                ...item,
+                                ...JSON.parse(key.decrypt(item.data)),
+                            })
+                        )
+                    ),
+                },
+            };
+        } catch {
+            return;
+        }
     }
 
     public static async create(name: string) {
