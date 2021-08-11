@@ -1,30 +1,36 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "@components/screens/HomeScreen";
 import RemoteAuthenticationStack from "./RemoteAuthenticationStack";
 import OptionsScreen from "@components/screens/OptionsScreen";
 import { Appbar } from "react-native-paper";
-import { useUser } from "@components/providers/AuthenticationProvider";
 import AccountScreen from "@components/screens/AccountScreen";
 import CreditCardScreen from "@components/screens/CreditCardScreen";
 import SelectItemTypeScreen from "@components/screens/SelectItemTypeScreen";
 import CreateAccountScreen from "@components/screens/CreateAccountScreen";
 import SearchPlatformScreen from "@components/screens/SelectPlatformScreen";
 import CreateSafeScreen from "@components/screens/CreateSafeScreen";
+import { DrawerActions } from "@react-navigation/native";
 
-const MainStack = createStackNavigator();
+const MainStack = createNativeStackNavigator();
 
 const MainNavigator = () => {
-    const { user } = useUser();
-
     return (
         <MainStack.Navigator
             screenOptions={{
                 header: (props) => (
                     <Appbar.Header theme={{ colors: { primary: "#ffffff" } }}>
-                        {props.navigation.canGoBack() && (
+                        {props.back ? (
                             <Appbar.BackAction onPress={() => props.navigation.goBack()} />
+                        ) : (
+                            <Appbar.Action
+                                icon={"menu"}
+                                onPress={() => props.navigation.dispatch(DrawerActions.toggleDrawer())}
+                            />
                         )}
+                        <Appbar.Content
+                            title={"Wault"}
+                        />
                     </Appbar.Header>
                 ),
             }}
@@ -32,14 +38,6 @@ const MainNavigator = () => {
             <MainStack.Screen
                 name={"home"}
                 component={HomeScreen}
-                options={{
-                    header: (props) => (
-                        <Appbar.Header theme={{ colors: { primary: "#ffffff" } }}>
-                            <Appbar.Content title={user.username} subtitle={user.email} />
-                            <Appbar.Action icon="cog" onPress={() => props.navigation.navigate("options")} />
-                        </Appbar.Header>
-                    )
-                }}
             />
             <MainStack.Screen
                 component={SelectItemTypeScreen}

@@ -8,8 +8,9 @@ import ThemeProvider from '@components/providers/ThemeProvider';
 import Toast from 'react-native-toast-message';
 import { Portal } from 'react-native-paper';
 import BiometricProvider from '@components/providers/BiometricProvider';
+import RootNavigator from '@components/navigators/RootNavigator';
 
-enableScreens(true);
+enableScreens();
 
 export default function App() {
     return (
@@ -24,7 +25,7 @@ export default function App() {
                 <AuthenticationProvider>
                     <BiometricProvider>
                         <DataProvider>
-                            <MainNavigator />
+                            <RootNavigator />
                         </DataProvider>
                     </BiometricProvider>
                 </AuthenticationProvider>

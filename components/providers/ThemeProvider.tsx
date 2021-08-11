@@ -9,8 +9,14 @@ import Colors from "@lib/Colors";
 
 export type ThemeProviderProps = PropsWithChildren<{}>;
 
-const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
-const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
+const CombinedDefaultTheme = merge(
+    PaperDefaultTheme,
+    NavigationDefaultTheme,
+);
+const CombinedDarkTheme = merge(
+    PaperDarkTheme,
+    NavigationDarkTheme
+);
 
 type StateType = "light" | "dark" | "system-preference";
 
