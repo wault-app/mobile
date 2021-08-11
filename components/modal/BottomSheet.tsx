@@ -44,7 +44,6 @@ const BottomSheetTemplate = forwardRef<BottomSheetModal, BottomSheetModalProps>(
                 changeNavigationBarColor(theme.colors.surface, !theme.dark, false);
             }}
             onDismiss={() => {
-                console.log("dismiss")
                 changeNavigationBarColor(Colors.rgbToHex(theme.colors.background), !theme.dark, true);
                 setOpen(false);
             }}

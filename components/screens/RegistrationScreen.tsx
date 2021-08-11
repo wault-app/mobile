@@ -6,6 +6,8 @@ import { UserType } from "@lib/api/User";
 import WrapperError from "@wault/error";
 import Toast from "react-native-toast-message";
 import { openInbox } from "react-native-email-link";
+import AdvancedRegistrationSettingsButton from "@components/registration/AdvancedRegistrationSettingsButton";
+import { ScrollView } from "react-native-gesture-handler";
 
 export type RegistrationScreenProps = {
     setUser: Dispatch<SetStateAction<UserType>>;
@@ -34,7 +36,6 @@ const RegistrationScreen = (props: RegistrationScreenProps) => {
             }
 
             setDisabled(false);
-            console.log(e);
         }
     };
 
@@ -60,6 +61,8 @@ const RegistrationScreen = (props: RegistrationScreenProps) => {
     }
 
     return (
+        <ScrollView>
+            
         <View style={styles.root}>
             <Title style={[styles.row]}>
                 Register a new user!
@@ -88,12 +91,16 @@ const RegistrationScreen = (props: RegistrationScreenProps) => {
                 disabled={username.length < 4 || !isEmail(email) || disabled}
                 onPress={register}
                 loading={disabled}
-                style={[styles.row, styles.button]}
-                mode={"outlined"}
+                style={[styles.row]}
+                mode={"contained"}
             >
                 Register
             </Button>
+            <AdvancedRegistrationSettingsButton
+                style={[styles.row]}
+            />
         </View>
+        </ScrollView>
     );
 };
 

@@ -4,6 +4,7 @@ import ThemeSelector from "@components/settings/ThemeSelector";
 import RemoteAuthenticationButton from "@components/settings/RemoteAuthenticationButton";
 import BiometricButton from "@components/settings/BiometricButton";
 import DevicesButton from "@components/settings/DevicesButton";
+import ServerSelectorButton from "@components/settings/ServerSelectorButton";
 
 export type OptionsScreenProps = {};
 
@@ -15,6 +16,7 @@ const OptionsScreen = (props: OptionsScreenProps) => {
             <RemoteAuthenticationButton />
             <BiometricButton />
             <DevicesButton />
+            <ServerSelectorButton />
         </ScrollView>
     );
 };
