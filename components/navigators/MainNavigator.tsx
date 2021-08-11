@@ -11,6 +11,7 @@ import CreateAccountScreen from "@components/screens/CreateAccountScreen";
 import SearchPlatformScreen from "@components/screens/SelectPlatformScreen";
 import CreateSafeScreen from "@components/screens/CreateSafeScreen";
 import { DrawerActions } from "@react-navigation/native";
+import SearchScreen from "@components/screens/SearchScreen";
 
 const MainStack = createNativeStackNavigator();
 
@@ -31,6 +32,10 @@ const MainNavigator = () => {
                         <Appbar.Content
                             title={"Wault"}
                         />
+                        <Appbar.Action
+                            icon={"magnify"}
+                            onPress={() => props.navigation.navigate("search")}
+                        />
                     </Appbar.Header>
                 ),
             }}
@@ -42,6 +47,13 @@ const MainNavigator = () => {
             <MainStack.Screen
                 component={SelectItemTypeScreen}
                 name={"add-item"}
+            />
+            <MainStack.Screen
+                component={SearchScreen}
+                name={"search"}
+                options={{
+                    headerShown: false,
+                }}
             />
             <MainStack.Screen
                 component={CreateAccountScreen}
