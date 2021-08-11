@@ -5,7 +5,7 @@ const get = async <T = {}>(input: RequestInfo, init?: RequestInit): Promise<T> =
     const API_ENDPOINT = await ServerSelector.get();
 
     console.log(`${init?.method || "GET"} ${API_ENDPOINT}${input}`);
-    const resp = await fetch(`${API_ENDPOINT}${input}`, {
+    const resp = await fetch(`https://${API_ENDPOINT}${input}`, {
         ...init,
         headers: {
             "Accept": "application/json",
