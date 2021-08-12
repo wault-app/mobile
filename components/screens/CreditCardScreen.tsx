@@ -1,6 +1,6 @@
 import CreditCardDisplay from "@components/cards/CreditCardDisplay";
-import { CreditCardType } from "@lib/api/Item";
 import { Route } from "@react-navigation/native";
+import { CreditCardType } from "@wault/typings";
 import React from "react";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -15,7 +15,7 @@ const CreditCardScreen = (props: CreditCardScreenProps) => {
     
     return (
         <ScrollView>
-            <CreditCardDisplay {...creditCard} />
+            <CreditCardDisplay creditCard={creditCard} />
         </ScrollView>
     );
 };
