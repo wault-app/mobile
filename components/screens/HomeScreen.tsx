@@ -26,14 +26,14 @@ const HomeScreen = (props: HomeScreenProps) => {
         (index) => {
             return provider.getDataForIndex(index).type;
         }, (type, dim) => {
-            if(type === "header") {
+            if (type === "header") {
                 dim.height = 42;
             } else {
                 dim.height = 72;
             }
 
             dim.width = width;
-    });
+        });
 
     useEffect(() => {
         const data = [];
@@ -43,13 +43,13 @@ const HomeScreen = (props: HomeScreenProps) => {
                 type: "header",
                 keycard,
             });
-            data.push(...keycard.safe.items.map((item) => ({type: "item", ...item})));
+            data.push(...keycard.safe.items.map((item) => ({ type: "item", ...item })));
         }
 
         setProvider(provider.cloneWithRows(data));
     }, [keycards]);
 
-    const refreshControl = (  
+    const refreshControl = (
         <RefreshControl
             refreshing={refreshing}
             onRefresh={async () => {
@@ -71,7 +71,7 @@ const HomeScreen = (props: HomeScreenProps) => {
 
     return (
         <Fragment>
-            {keycards.length > 0 ? (      
+            {keycards.length > 0 ? (
                 <RecyclerListView
                     style={{ flex: 1 }}
                     dataProvider={provider}
@@ -101,27 +101,27 @@ const HomeScreen = (props: HomeScreenProps) => {
                 />
             )}
 
-                <FAB
-                    style={[
-                        styles.fab,
-                        {
-                            backgroundColor: theme.colors.primary,
-                        }
-                    ]}
-                    onPress={() => navigation.navigate("add-item")}
-                    icon={"plus"}
-                />
+            <FAB
+                style={[
+                    styles.fab,
+                    {
+                        backgroundColor: theme.colors.primary,
+                    }
+                ]}
+                onPress={() => navigation.navigate("add-item")}
+                icon={"plus"}
+            />
         </Fragment>
     );
 };
 
 const styles = StyleSheet.create({
     fab: {
-      position: 'absolute',
-      margin: 16,
-      right: 0,
-      bottom: 0,
+        position: 'absolute',
+        margin: 16,
+        right: 0,
+        bottom: 0,
     },
-  })
-  
+})
+
 export default HomeScreen;

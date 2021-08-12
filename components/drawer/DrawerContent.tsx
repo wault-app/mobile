@@ -50,6 +50,7 @@ const DrawerContent = (props: DrawerContentProps) => {
             <Drawer.Item
                 icon={"safe-square-outline"}
                 label={"Safes"}
+                onPress={() => navigate("safe")}
             />
             <Drawer.Item
                 icon={"cog"}

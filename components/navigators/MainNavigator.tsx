@@ -12,6 +12,7 @@ import SearchPlatformScreen from "@components/screens/SelectPlatformScreen";
 import CreateSafeScreen from "@components/screens/CreateSafeScreen";
 import { DrawerActions } from "@react-navigation/native";
 import SearchScreen from "@components/screens/SearchScreen";
+import SafeScreen from "@components/screens/SafeScreen";
 
 const MainStack = createNativeStackNavigator();
 
@@ -43,6 +44,10 @@ const MainNavigator = () => {
             <MainStack.Screen
                 name={"home"}
                 component={HomeScreen}
+            />
+            <MainStack.Screen
+                name={"safe"}
+                component={SafeScreen}
             />
             <MainStack.Screen
                 component={SelectItemTypeScreen}
