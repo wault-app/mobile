@@ -9,8 +9,6 @@ import { Button, List } from "react-native-paper";
 export type AdvancedRegistrationSettingsButtonProps = any;
 
 const AdvancedRegistrationSettingsButton = (props: AdvancedRegistrationSettingsButtonProps) => {
-    const [expanded, setExpanded] = React.useState(false);
-
     const sheet = useBottomSheet();
     const { height } = Dimensions.get("window");
     const snapPoints = useMemo(() => [200, height - StatusBar.currentHeight], []);

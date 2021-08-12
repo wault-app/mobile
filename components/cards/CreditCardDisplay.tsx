@@ -1,33 +1,29 @@
+import { CreditCardType } from "@wault/typings";
 import React from "react";
-import { CreditCardType } from "@lib/api/Item";
-import { Text, View } from "react-native";
-import { StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 
 export type CreditCardDisplayProps = {
-    number?: string;
-    cardholder?: string;
-    expiry?: string;
-    cvc?: string;
+    creditCard: CreditCardType;
 };
 
-const CreditCardDisplay = (props: CreditCardDisplayProps) => {
+const CreditCardDisplay = ({ creditCard }: CreditCardDisplayProps) => {
     return (
         <View style={styles.root}>
             <View>
                 <Text style={styles.number}>
-                    {props.number}
+                    {creditCard.number}
                 </Text>
             </View>
             <View style={styles.row}>
                 <View style={styles.cardholder}>
                     <Text>
-                        {props.cardholder}
+                        {creditCard.cardholder}
                     </Text>
                 </View>
                 
                 <View style={styles.expiry}>
                     <Text>
-                        {props.expiry}
+                        {creditCard.expiry}
                     </Text>
                 </View>
             </View>

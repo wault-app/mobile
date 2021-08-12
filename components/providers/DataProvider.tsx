@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useState, PropsWithChildren } from "react";
 import ErrorScreen from "@components/screens/ErrorScreen";
-import Safe, { KeycardType, SafeType } from "@lib/api/Safe";
 import WrapperError from "@wault/error";
 import AppLoading from "expo-app-loading";
-import { ItemType } from "@lib/api/Item";
+import { ItemType, KeycardType, SafeType } from "@wault/typings";
+import Safe from "@lib/api/Safe";
 
 type DataContextType = {
     keycards: KeycardType[];

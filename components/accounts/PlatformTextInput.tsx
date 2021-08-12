@@ -17,7 +17,12 @@ const PlatformTextInput = (props: PlatformTextInputProps) => {
             {...props}
             label={"Platform"}
             render={() => (
-                <TouchableWithoutFeedback onPress={() => navigation.navigate("search-platform", { setPlatform: props.onChangeText })}>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate({ 
+                    key: "search-platform",
+                    params: {
+                        setPlatform: props.onChangeText
+                    },
+                })}>
                     <View style={{ flexDirection: "row"}}>
                         <View style={styles.left}>
                             <Text>

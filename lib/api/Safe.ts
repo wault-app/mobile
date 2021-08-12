@@ -4,35 +4,9 @@ import EncryptionKey from "../encryption/EncryptionKey";
 import AES from "../encryption/AES";
 import Device from "./Device";
 import KeyExchange from "./KeyExchange";
-import { EncryptedItemType, ItemType } from "./Item";
 import RSA from "../encryption/RSA";
 import SecureStore from "./SecureStore";
-
-export type RoleType = "OWNER" | "WRITER" | "READER";
-
-export type SafeType = {
-    id: string;
-    name: string;
-    items: ItemType[];
-};
-
-export type KeycardType = {
-    id: string;
-    safe: SafeType;
-    role: RoleType;
-};
-
-type EncryptedSafeType = {
-    id: string;
-    name: string;
-    items: EncryptedItemType[];
-};
-
-type EncryptedKeycardType = {
-    id: string;
-    safe: EncryptedSafeType;
-    role: RoleType;
-};
+import { EncryptedKeycardType, KeycardType } from "@wault/typings";
 
 export default class Safe {
     public static async getAll(force: boolean = false): Promise<KeycardType[]> {

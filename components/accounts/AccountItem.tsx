@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import { AccountType } from "@lib/api/Item";
 import { List, Portal } from "react-native-paper";
 import PlatformIcon from "@components/platforms/PlatformIcon";
 import { useNavigation } from "@react-navigation/native";
@@ -10,6 +9,7 @@ import OpenInBrowserButton from "./OpenInBrowserButton";
 import CopyUsernameButton from "./CopyUsernameButton";
 import CopyPasswordButton from "./CopyPasswordButton";
 import ShowTOTPButton from "./ShowTOTPButton";
+import { AccountType } from "@wault/typings";
 
 export type AccountItemProps = {
     account: AccountType;
@@ -25,7 +25,12 @@ const AccountItem = (props: AccountItemProps) => {
             <List.Item
                 title={props.account.platform}
                 description={props.account.username}
-                onPress={() => navigation.navigate("account-info", { account: props.account })}
+                onPress={() => navigation.navigate({ 
+                    name: "account-info",
+                    params: {
+                        account: props.account,
+                    },
+                })}
                 onLongPress={() => sheet.current.present()}
                 left={() => <PlatformIcon platform={props.account.platform} />}
             />

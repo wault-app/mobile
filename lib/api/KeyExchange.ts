@@ -1,8 +1,7 @@
-import post from "@lib/fetch/post";
 import EncryptionKey from "@lib/encryption/EncryptionKey";
 import get from "@lib/fetch/get";
 import RSA from "@lib/encryption/RSA";
-import { SafeType } from "./Safe";
+import { KeyExchangeType } from "@wault/typings";
 
 export default class KeyExchange {
     /**
@@ -11,13 +10,7 @@ export default class KeyExchange {
      */
     public static async getAll() {
         type ResponseType = {
-            keyExchanges: ({
-                id: string;
-                safe: {
-                    id: string;
-                };
-                value: string;
-            })[];
+            keyExchanges: KeyExchangeType[];
         };
 
         const privateKey = await RSA.load();

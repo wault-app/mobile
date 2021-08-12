@@ -16,7 +16,7 @@ import LastPassIcon from "@components/icons/LastPassIcon";
 import SlackIcon from "@components/icons/SlackIcon";
 import RiotGamesIcon from "@components/icons/RiotGamesIcon";
 import RedditIcon from "@components/icons/RedditIcon";
-import { CategoryType } from "./Categories";
+import { CategoryType } from "@wault/typings";
 
 export type PlatformType = {
     name: string;

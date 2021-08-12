@@ -17,6 +17,8 @@
     "@react-navigation/native-stack": "^6.0.4",
     "@react-navigation/stack": "^6.0.4",
     "@wault/error": "git+https://github.com/wault-app/error.git",
+    "@wault/totp": "git+https://github.com/wault-app/totp.git",
+    "@wault/typings": "git+https://github.com/wault-app/typings.git",
     "aes-js": "^3.1.2",
     "babel-plugin-module-resolver": "^4.1.0",
     "buffer": "^6.0.3",

@@ -1,11 +1,11 @@
 import React from "react";
-import { CreditCardType } from "@lib/api/Item";
 import { List } from "react-native-paper";
 import { useMemo } from "react";
 import Payment from "payment";
 import Issuers from "@lib/credit-card/Issuers";
 import CreditCardIcon from "./CreditCardIcon";
 import { useNavigation } from "@react-navigation/native";
+import { CreditCardType } from "@wault/typings";
 
 export type CreditCardItemProps = {
     creditCard: CreditCardType;

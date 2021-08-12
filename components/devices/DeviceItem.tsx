@@ -1,5 +1,5 @@
+import { DeviceType } from "@wault/typings";
 import React from "react";
-import { DeviceType } from "@lib/api/Device";
 import { List, useTheme } from "react-native-paper";
 
 export type DeviceItemProps = {

@@ -1,14 +1,6 @@
 import get from "../fetch/get";
 import post from "../fetch/post";
-import { UserType } from "./User";
-
-export type DeviceType = {
-    id: string;
-    name: string;
-    loggedInAt: string;
-    rsaKey: string;
-    type: "MOBILE" | "BROWSER" | "DESKTOP" | "CLI";
-};
+import { DeviceType } from "@wault/typings";
 
 export default class Device {
     public static async getAll() {

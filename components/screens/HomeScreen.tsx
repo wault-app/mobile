@@ -2,14 +2,13 @@ import React, { Fragment, useEffect, useState } from "react";
 import AccountItem from "@components/accounts/AccountItem";
 import { useKeycards } from "@components/providers/DataProvider";
 import { Dimensions, RefreshControl, StyleSheet } from "react-native";
-import { ItemType } from "@lib/api/Item";
 import { DataProvider, LayoutProvider, RecyclerListView } from "recyclerlistview";
 import CreditCardItem from "@components/cards/CreditCardItem";
 import EmptyItemList from "../home/EmptyItemList";
 import Toast from "react-native-toast-message";
 import { FAB, List, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { KeycardType } from "@lib/api/Safe";
+import { ItemType, KeycardType } from "@wault/typings";
 
 export type HomeScreenProps = {};
 
@@ -108,7 +107,9 @@ const HomeScreen = (props: HomeScreenProps) => {
                         backgroundColor: theme.colors.primary,
                     }
                 ]}
-                onPress={() => navigation.navigate("add-item")}
+                onPress={() => navigation.navigate({
+                    key: "add-item"
+                })}
                 icon={"plus"}
             />
         </Fragment>

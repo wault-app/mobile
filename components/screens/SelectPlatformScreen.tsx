@@ -6,7 +6,7 @@ import Platforms from "@lib/api/Platforms";
 import { FlatList } from "react-native-gesture-handler";
 import FuseJS from "fuse.js";
 import PlatformIcon from "@components/platforms/PlatformIcon";
-import Categories from "@lib/api/Categories";
+import Categories from "@wault/typings/src/Category";
 
 if (Platform.OS === "android") {
     UIManager?.setLayoutAnimationEnabledExperimental(true);

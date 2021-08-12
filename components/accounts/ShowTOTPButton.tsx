@@ -1,11 +1,6 @@
-import React, { Fragment } from "react";
-import Clipboard from "@react-native-community/clipboard";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import { List, Modal, Portal, Title, useTheme } from "react-native-paper";
-import Toast from "react-native-toast-message";
-import { useMemo } from "react";
-import TOTP from "@lib/TOTP";
-import { useState } from "react";
-import { useEffect } from "react";
+import TOTP from "@wault/totp";
 import { TwoFactorProgressBar } from "./TOTPTextInput";
 import { URL } from "react-native-url-polyfill";
 import { StyleSheet } from "react-native";
@@ -30,7 +25,17 @@ const ShowTOTPButton = (props: ShowTOTPButtonProps) => {
     }, []);
 
     const code = useMemo(
-        () => props.secret ? TOTP.get(new URL(props.secret)) : "",
+        () => {
+            if(!props.secret) return "";
+
+            const url = new URL(props.secret);
+
+            const secret = url.searchParams.get("secret");
+            const period = parseInt(url.searchParams.get("period"));
+            const digits = parseInt(url.searchParams.get("digits"));
+
+            return TOTP.get(secret, period, digits);
+        },
         [props.secret, date.getMinutes(), Math.floor(date.getSeconds() / 30)]
     )
 

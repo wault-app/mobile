@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import color from "color";
-import TOTP from "@lib/TOTP";
+import TOTP from "@wault/totp";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { URL } from "react-native-url-polyfill";
 
@@ -31,7 +31,17 @@ const TOTPTextInput = (props: TOTPTextInputProps) => {
     }, []);
 
     const code = useMemo(
-        () => props.value ? TOTP.get(new URL(props.value)) : "",
+        () => {
+            if(!props.value) return "";
+
+            const url = new URL(props.value);
+
+            const secret = url.searchParams.get("secret");
+            const period = parseInt(url.searchParams.get("period"));
+            const digits = parseInt(url.searchParams.get("digits"));
+        
+            return TOTP.get(secret, period, digits);
+        },
         [props.value, date.getMinutes(), Math.floor(date.getSeconds() / 30)]
     );
 

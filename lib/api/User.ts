@@ -1,23 +1,6 @@
-import get from "@lib/fetch/get";
-import { DeviceType } from "./Device";
+import { SessionTokenType } from "@wault/typings";
 import { Buffer } from "buffer";
 import SessionToken from "./AccessToken";
-
-type SessionTokenType = UserType & {
-    device: DeviceType;
-};
-
-export type UserType = {
-    id: string;
-    username: string;
-    email: string;
-    icon?: IconType;
-};
-
-export type IconType = {
-    type: "EMOJI" | "IMAGE";
-    value: string;
-};
 
 export default class User {
     /**
