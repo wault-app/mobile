@@ -1,8 +1,9 @@
-import Platforms from "@lib/api/Platforms";
-import React from "react";
+import Platforms from "@wault/platforms";
+import React, { useMemo } from "react";
 import { View, StyleSheet } from "react-native";
 import { Avatar } from "react-native-paper";
 import CustomAvatar from "./PlatformIcon/Avatar";
+import IconLibrary from "@lib/PlatformIcon";
 
 export type PlatformIconProps = {
     platform: string;
@@ -10,8 +11,14 @@ export type PlatformIconProps = {
 };
 
 const PlatformIcon = ({ platform, size = 40 }: PlatformIconProps) => {
-    const data = Platforms.get(platform.toLowerCase());
+    const hostname = platform?.toLowerCase();
+    const data = Platforms.get(hostname);
     const iconSize = size / 40 * 24;
+
+    const Icon = useMemo(
+        () => IconLibrary.get(hostname),
+        [hostname]
+    );
 
     const wrapperSizes = {
         width: size,
@@ -19,11 +26,14 @@ const PlatformIcon = ({ platform, size = 40 }: PlatformIconProps) => {
     };
 
     if (data) {
-        if (data.icon) {
+        if (Icon) {
             return (
                 <CustomAvatar size={size} style={{ elevation: 2, }} color={data.color}>
                     <View style={[{ width: iconSize, height: iconSize }]}>
-                        <data.icon />
+                        <Icon
+                            width={iconSize}
+                            height={iconSize}
+                        />
                     </View>
                 </CustomAvatar>
             );

@@ -1,17 +1,17 @@
 import PlatformIcon from "@components/platforms/PlatformIcon";
-import { AccountType } from "@lib/api/Item";
 import { Route } from "@react-navigation/routers";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import Platforms from "@lib/api/Platforms";
+import Platforms from "@wault/platforms";
 import { Subheading, Title, useTheme } from "react-native-paper";
 import CopyUsernameButton from "@components/accounts/CopyUsernameButton";
 import CopyPasswordButton from "@components/accounts/CopyPasswordButton";
 import OpenInBrowserButton from "@components/accounts/OpenInBrowserButton";
 import ShowDescriptionButton from "@components/accounts/ShowDescriptionButton";
 import ShowTOTPButton from "@components/accounts/ShowTOTPButton";
+import { AccountType } from "@wault/typings";
 
 export type AccountScreenProps = {
     route: Route<"account-info", {

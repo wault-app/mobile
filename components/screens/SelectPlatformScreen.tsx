@@ -1,12 +1,15 @@
 import React, { Fragment, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/core";
-import { Appbar, List, Searchbar, Text, Title, useTheme } from "react-native-paper";
-import { Platform, StatusBar, TextInput, UIManager, View } from "react-native";
-import Platforms from "@lib/api/Platforms";
-import { FlatList } from "react-native-gesture-handler";
+import { Appbar, List, useTheme } from "react-native-paper";
+import { Platform, StatusBar, TextInput, UIManager } from "react-native";
 import FuseJS from "fuse.js";
 import PlatformIcon from "@components/platforms/PlatformIcon";
 import Categories from "@wault/typings/src/Category";
+import Platforms from "@wault/platforms";
+import { useMemo } from "react";
+import { DataProvider, LayoutProvider, RecyclerListView } from "recyclerlistview";
+import { Dimensions } from "react-native";
+import { PlatformTypeWithDomain } from "@wault/platforms/src/Platforms";
 
 if (Platform.OS === "android") {
     UIManager?.setLayoutAnimationEnabledExperimental(true);
@@ -18,37 +21,53 @@ const SearchPlatformScreen = () => {
     const route = useRoute();
     const navigation = useNavigation();
 
-    const data = Object.keys(Platforms.getAll()).map((domain) => ({
-        ...Platforms.get(domain),
-        domain,
-    }));
+    const data = useMemo(
+        () => {
+            return Platforms.getAll();
+        },
+        []
+    )
 
-    const fuse = new FuseJS(data, {
-        keys: ["domain", "name", "categories"],
-    })
+    const fuse = useMemo(
+        () => {
+            return new FuseJS(data, {
+                keys: ["domain", "name", "categories"],
+            })
+        },
+        []
+    );
 
-    const search = (platform: string) => {
-        let resp = data;
-        if(platform.length > 0) resp = fuse.search(platform).map(({ item }) => item);
-        
-        if(platform.length > 0 && !resp.map((el) => el.domain.toLocaleLowerCase()).includes(platform.toLocaleLowerCase())) {
-            resp = [{
-                name: platform,
-                domain: platform,
-                color: theme.colors.primary,
-                categories: [],
-            }, ...resp]
-        }
+    const dataProvider = useMemo(
+        () => {
+            const dataProvider = new DataProvider((r1, r2) => r1 !== r2);
 
-        return resp;
-    };
+            if (platform.length > 0) {
+                const results = fuse.search(platform);
+                return dataProvider.cloneWithRows(results.map((el) => el.item));
+            } else {
+                return dataProvider.cloneWithRows(data);
+            }
+        },
+        [platform]
+    );
+
+    const layoutProvider = useMemo(
+        () => (
+            new LayoutProvider(() => 1, (type, dim) => {
+                const { width } = Dimensions.get("window");
+                dim.width = width;
+                dim.height = 72;
+            })
+        ),
+        []
+    );
 
     return (
         <Fragment>
             <Appbar.Header style={{ backgroundColor: theme.colors.surface, marginTop: StatusBar.currentHeight }} dark={theme.dark}>
                 <Appbar.BackAction onPress={() => navigation.goBack()} />
 
-                <TextInput 
+                <TextInput
                     placeholder={"Search"}
                     style={{
                         color: theme.colors.onSurface,
@@ -65,36 +84,26 @@ const SearchPlatformScreen = () => {
                     value={platform}
                 />
             </Appbar.Header>
-
-                <FlatList
-                    data={search(platform)}
-                    keyExtractor={(item) => item.domain}
-                    renderItem={(platform: { item: typeof data[0] }) => (
+            {dataProvider.getSize() > 0 && (
+                <RecyclerListView
+                    style={{ flex: 1 }}
+                    dataProvider={dataProvider}
+                    layoutProvider={layoutProvider}
+                    rowRenderer={(type, platform: PlatformTypeWithDomain) => (
                         <List.Item
-                            key={`platform-butotn-${platform.item.domain}`}
+                            key={`platform-button-${platform.domain}`}
                             onPress={() => {
                                 navigation.goBack();
                                 // @ts-ignore
-                                route.params.setPlatform(platform.item.domain);
+                                route.params.setPlatform(platform.domain);
                             }}
-                            left={(props) => <PlatformIcon {...props} platform={platform.item.domain} />}
-                            title={platform.item.name}
-                            description={platform.item.categories?.map((category) => Categories.get(category).name).join(", ")}
+                            left={(props) => <PlatformIcon {...props} platform={platform.domain} />}
+                            title={platform.name}
+                            description={platform.categories?.map((category) => Categories.get(category).name).join(", ")}
                         />
                     )}
-                    ListFooterComponent={() => (
-                        <Fragment>
-                            <View style={{ margin: 16 }}>
-                                <Title style={{ textAlign: "center" }}>
-                                    Do you want to add more platform?
-                                </Title>
-                                <Text style={{ textAlign: "center" }}>
-                                    Please contact us at support@wault.app
-                                </Text>
-                            </View>
-                        </Fragment>
-                    )}
-                />             
+                />
+            )}
         </Fragment>
     );
 };

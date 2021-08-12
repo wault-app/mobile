@@ -17,6 +17,7 @@
     "@react-navigation/native-stack": "^6.0.4",
     "@react-navigation/stack": "^6.0.4",
     "@wault/error": "git+https://github.com/wault-app/error.git",
+    "@wault/platforms": "git+https://github.com/wault-app/platforms.git",
     "@wault/totp": "git+https://github.com/wault-app/totp.git",
     "@wault/typings": "git+https://github.com/wault-app/typings.git",
     "aes-js": "^3.1.2",
@@ -75,9 +76,11 @@
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
     "@types/react-native-vector-icons": "^6.4.7",
+    "babel-plugin-inline-import": "^3.0.0",
     "babel-preset-expo": "8.3.0",
     "fuse.js": "^6.4.6",
     "jest-expo": "^42.0.0",
+    "react-native-svg-transformer": "^0.14.3",
     "typescript": "~4.0.0"
   },
   "jest": {
