@@ -18,7 +18,7 @@ const PlatformTextInput = (props: PlatformTextInputProps) => {
             label={"Platform"}
             render={() => (
                 <TouchableWithoutFeedback onPress={() => navigation.navigate({ 
-                    key: "search-platform",
+                    name: "search-platform",
                     params: {
                         setPlatform: props.onChangeText
                     },

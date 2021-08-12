@@ -108,7 +108,7 @@ const HomeScreen = (props: HomeScreenProps) => {
                     }
                 ]}
                 onPress={() => navigation.navigate({
-                    key: "add-item"
+                    name: "add-item"
                 })}
                 icon={"plus"}
             />
