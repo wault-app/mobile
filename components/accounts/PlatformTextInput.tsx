@@ -25,7 +25,7 @@ const PlatformTextInput = (props: PlatformTextInputProps) => {
                 })}>
                     <View style={{ flexDirection: "row"}}>
                         <View style={styles.left}>
-                            <Text>
+                            <Text style={styles.text}>
                                 {props.value}
                             </Text>
                         </View>
@@ -49,8 +49,10 @@ const styles = StyleSheet.create({
     left: {
         flexGrow: 1,
         marginTop: 18,
-        fontSize: 16,
         padding: 12,
+    },
+    text: {
+        fontSize: 16,
     },
     right: {
         alignSelf: "flex-end",
