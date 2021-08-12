@@ -1,6 +1,5 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetModalProps } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
-import Colors from "@lib/Colors";
 import { useNavigation } from "@react-navigation/native";
 import Color from "color";
 import React, { forwardRef, memo } from "react";
