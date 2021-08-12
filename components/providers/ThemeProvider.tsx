@@ -43,7 +43,7 @@ const ThemeProvider = (props: ThemeProviderProps) => {
 
     useEffect(() => {
         // apply it to the navigation bar
-        changeNavigationBarColor(Color(theme.colors.background).hex(), theme.dark, true);
+        changeNavigationBarColor(Color(theme.colors.background).hex(), !theme.dark, true);
     }, [theme]);
 
     return (
