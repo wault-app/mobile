@@ -2,6 +2,7 @@ import { BottomSheetBackdrop, BottomSheetModal, BottomSheetModalProps } from "@g
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import Colors from "@lib/Colors";
 import { useNavigation } from "@react-navigation/native";
+import Color from "color";
 import React, { forwardRef, memo } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -44,7 +45,7 @@ const BottomSheetTemplate = forwardRef<BottomSheetModal, BottomSheetModalProps>(
                 changeNavigationBarColor(theme.colors.surface, !theme.dark, false);
             }}
             onDismiss={() => {
-                changeNavigationBarColor(Colors.rgbToHex(theme.colors.background), !theme.dark, true);
+                changeNavigationBarColor(Color(theme.colors.background).hex(), !theme.dark, true);
                 setOpen(false);
             }}
             ref={ref}

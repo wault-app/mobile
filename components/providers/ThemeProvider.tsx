@@ -6,6 +6,7 @@ import { DarkTheme as PaperDarkTheme, DefaultTheme as PaperDefaultTheme, Provide
 import changeNavigationBarColor from "react-native-navigation-bar-color";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Colors from "@lib/Colors";
+import Color from "color";
 
 export type ThemeProviderProps = PropsWithChildren<{}>;
 
@@ -42,7 +43,7 @@ const ThemeProvider = (props: ThemeProviderProps) => {
 
     useEffect(() => {
         // apply it to the navigation bar
-        changeNavigationBarColor(Colors.rgbToHex(theme.colors.background), theme.dark, true);
+        changeNavigationBarColor(Color(theme.colors.background).hex(), theme.dark, true);
     }, [theme]);
 
     return (
