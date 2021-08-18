@@ -1,8 +1,6 @@
 import post from "../fetch/post";
 import get from "../fetch/get";
-import EncryptionKey from "../encryption/EncryptionKey";
 import AES from "../encryption/AES";
-import Device from "./Device";
 import RSA from "../encryption/RSA";
 import SecureStore from "./SecureStore";
 import { EncryptedKeycardType, KeycardType } from "@wault/typings";
@@ -48,14 +46,10 @@ export default class Safe {
 
     private static async decrypt(keycard: EncryptedKeycardType): Promise<KeycardType> {
         try {
-            const userKey = await EncryptionKey.get();
-
-            const key = AES.decrypt(keycard.secret, userKey);
+            const key = await RSA.decrypt(keycard.secret, await RSA.getPrivateKey());
 
             const aes = new AES(key);
 
-            console.log(keycard);
-        
             return {
                 ...keycard,
                 safe: {
@@ -83,9 +77,6 @@ export default class Safe {
             keycard: EncryptedKeycardType;
         };
 
-        // get user's encryption key
-        const key = await EncryptionKey.get();
-
         // generate a secret for the safe
         const secret = await Secret.generate();
 
@@ -97,7 +88,7 @@ export default class Safe {
                 description: AES.encrypt(description, secret),
                 
                 // keycard realted information
-                secret: AES.encrypt(secret, key),
+                secret: await RSA.encrypt(secret, await RSA.getPublicKey()),
             })
         });
 
