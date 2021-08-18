@@ -1,5 +1,5 @@
 import { useKeycards } from "@components/providers/DataProvider";
-import { KeycardType } from "@lib/api/Safe";
+import { KeycardType } from "@wault/typings";
 import React from "react";
 import { useMemo } from "react";
 import { Dimensions } from "react-native";

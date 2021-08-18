@@ -1,5 +1,5 @@
 import { useKeycards } from "@components/providers/DataProvider";
-import { ItemType } from "@lib/api/Item";
+import { ItemType } from "@wault/typings";
 import React from "react";
 import { useMemo } from "react";
 import { DataProvider, LayoutProvider, RecyclerListView } from "recyclerlistview";
@@ -7,7 +7,7 @@ import Fuse from "fuse.js";
 import { useState } from "react";
 import { Dimensions, LayoutAnimation, UIManager, View } from "react-native";
 import AccountItem from "@components/accounts/AccountItem";
-import { Caption, Searchbar, Title } from "react-native-paper";
+import { Caption, Searchbar } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import { StatusBar } from "react-native";
 import StartTypingIllustration from "@components/undraw/StartTypingIllustration";

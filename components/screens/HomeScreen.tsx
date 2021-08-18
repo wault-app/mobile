@@ -37,6 +37,7 @@ const HomeScreen = (props: HomeScreenProps) => {
     useEffect(() => {
         const data = [];
 
+        console.log(keycards);
         for (const keycard of keycards) {
             data.push({
                 type: "header",

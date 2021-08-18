@@ -1,6 +1,7 @@
 import SecureStore from "@lib/api/SecureStore";
 import Forge from "node-forge";
 import modPow from "react-native-modpow";
+import EncryptionKey from "./EncryptionKey";
 
 // optimization (as RSA key generation would freeze the UI)
 Forge.jsbn.BigInteger.prototype.modPow = function nativeModPow(e, m) {
@@ -22,12 +23,20 @@ export default class RSA {
         return await Forge.pki.privateKeyFromPem(privateKey).decrypt(Forge.util.decode64(hash), "NONE");
     }
 
-    public static async load() {
-        return await SecureStore.getItemAsync("rsa-key");
+    public static async getPrivateKey() {
+        return await SecureStore.getItemAsync("rsa-private-key");
+    }
+    
+    public static async getPublicKey() {
+        return await SecureStore.getItemAsync("rsa-public-key");
     }
 
-    private static async save(privateKey: string) {
-        return await SecureStore.setItemAsync("rsa-key", privateKey);
+    public static async savePrivateKey(privateKey: string) {
+        return await SecureStore.setItemAsync("rsa-private-key", privateKey);
+    }
+
+    public static async savePublicKey(publicKey: string) {
+        return await SecureStore.setItemAsync("rsa-public-key", publicKey);
     }
 
     public static async generate(bits: number = 1024): Promise<{ publicKey: string; privateKey: string }> {
@@ -43,7 +52,10 @@ export default class RSA {
                     Forge.pki.privateKeyToPem(keys.privateKey),
                 ];
 
-                await this.save(privateKey);
+                await Promise.all([
+                    this.savePrivateKey(privateKey),
+                    this.savePublicKey(publicKey),
+                ]);
 
                 resolve({
                     publicKey,

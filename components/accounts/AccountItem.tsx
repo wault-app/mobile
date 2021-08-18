@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { List, Portal } from "react-native-paper";
+import { List } from "react-native-paper";
 import PlatformIcon from "@components/platforms/PlatformIcon";
 import { useNavigation } from "@react-navigation/native";
 import { useMemo } from "react";

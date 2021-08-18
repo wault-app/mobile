@@ -16,6 +16,7 @@
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.0.4",
     "@react-navigation/stack": "^6.0.4",
+    "@wault/category": "git+https://github.com/wault-app/category.git",
     "@wault/error": "git+https://github.com/wault-app/error.git",
     "@wault/platforms": "git+https://github.com/wault-app/platforms.git",
     "@wault/totp": "git+https://github.com/wault-app/totp.git",

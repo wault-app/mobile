@@ -2,34 +2,27 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { Button, Paragraph, TextInput, Title } from "react-native-paper";
 import Authentication from "@lib/api/Authentication";
-import { UserType } from "@wault/typings";
-import WrapperError from "@wault/error";
 import Toast from "react-native-toast-message";
-import { openInbox } from "react-native-email-link";
 import AdvancedRegistrationSettingsButton from "@components/registration/AdvancedRegistrationSettingsButton";
 import { ScrollView } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import User from "@lib/api/User";
+import { useUser } from "@components/providers/AuthenticationProvider";
 
-export type RegistrationScreenProps = {
-    setUser: Dispatch<SetStateAction<UserType>>;
-};
-
-const RegistrationScreen = (props: RegistrationScreenProps) => {
-    const [username, setUsername] = useState("");
+const LoginScreen = () => {
     const [email, setEmail] = useState("");
     const [password, setPassowrd] = useState("");
     const [disabled, setDisabled] = useState(false);
-    const [sent, setSent] = useState(false);
 
-    const navigation = useNavigation();
+    const { setUser } = useUser();
 
-    const register = async () => {
+    const login = async () => {
         setDisabled(true);
 
         try {
-            await Authentication.register(username, email, password);
+            await Authentication.login(email, password);
 
-            setSent(true);
+            const user = await User.get();
+            setUser(user);
         } catch (e) {
             Toast.show({
                 type: "error",
@@ -41,40 +34,10 @@ const RegistrationScreen = (props: RegistrationScreenProps) => {
         }
     };
 
-    if (sent) {
-        return (
-
-            <View style={styles.root}>
-                <Title style={[styles.row]}>
-                    Email successfully sent!
-                </Title>
-                <Paragraph style={[styles.row]}>
-                    Check your inbox for an email from Wault to verify your email address!
-                </Paragraph>
-                <Button
-                    style={[styles.row]}
-                    mode={"outlined"}
-                    onPress={() => openInbox()}
-                >
-                    Open Email app
-                </Button>
-            </View>
-        );
-    }
-
     return (
         <ScrollView>
 
             <View style={styles.root}>
-                <TextInput
-                    style={[styles.row]}
-                    onChangeText={setUsername}
-                    autoCompleteType={"username"}
-                    autoFocus
-                    label={"Username"}
-                    left={<TextInput.Affix text="@" />}
-                    autoCapitalize={"none"}
-                />
                 <TextInput
                     style={[styles.row]}
                     autoCompleteType={"email"}
@@ -92,21 +55,13 @@ const RegistrationScreen = (props: RegistrationScreenProps) => {
                     label={"Password"}
                 />
                 <Button
-                    disabled={username.length < 4 || password.length < 6 || !isEmail(email) || disabled}
-                    onPress={register}
+                    disabled={!isEmail(email) || password.length < 6 || disabled}
+                    onPress={login}
                     loading={disabled}
                     style={[styles.row]}
                     mode={"contained"}
                 >
-                    Register
-                </Button>
-                <Button
-                    disabled={disabled}
-                    onPress={() => navigation.navigate("login")}
-                    style={[styles.row]}
-                    mode={"outlined"}
-                >
-                    Already have an account
+                    Login
                 </Button>
                 <AdvancedRegistrationSettingsButton
                     style={[styles.row]}
@@ -135,4 +90,4 @@ const isEmail = (email: string) => {
     return re.test(String(email).toLowerCase());
 };
 
-export default RegistrationScreen;
+export default LoginScreen;

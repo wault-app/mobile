@@ -1,34 +1,16 @@
 import Secret from "./Secret";
 import SecureStore from "@lib/api/SecureStore";
-import KeyExchange from "@lib/api/KeyExchange";
-import Safe from "@lib/api/Safe";
 
 export default class EncryptionKey {
     public static async generate() {
         return await Secret.generate();
     }
 
-    public static async save(safeid: string, content: string) {
-        return await SecureStore.setItemAsync(`safe_encryption_key_${safeid}`, content);
+    public static async save(key: string) {
+        return await SecureStore.setItemAsync("encryption_key", key);
     }
 
-    public static async getAll(): Promise<{ [safeid: string]: string }> {
-        let resp: { [key: string]: string } = {};
-
-        const keycards = await Safe.getAll(true);
-        
-        await Promise.all(keycards.map(async (keycard) => {
-            resp[keycard.safe.id] = await EncryptionKey.get(keycard.safe.id);
-        }));
-
-        return resp;
-    }
-
-    public static async get(vaultid: string): Promise<string> {
-        const key = await SecureStore.getItemAsync(`safe_encryption_key_${vaultid}`);
-        if(key) return key;
-
-        await KeyExchange.getAll();
-        return await this.get(vaultid);
+    public static async get() {
+        return await SecureStore.getItemAsync("encryption_key");
     }
 }

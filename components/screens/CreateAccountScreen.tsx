@@ -23,7 +23,7 @@ const CreateAccountScreen = () => {
     const [totp, setTOTP] = useState("");
     const [description, setDescription] = useState("");
     const [disabled, setDisabled] = useState(false);
-    const [safe, setSafe] = useState(keycards[0]?.safe);
+    const [keycard, setKeycard] = useState(keycards[0]);
 
     const navigation = useNavigation();
 
@@ -31,7 +31,7 @@ const CreateAccountScreen = () => {
         setDisabled(true);
 
         try {
-            const { item, message } = await Item.create(safe, {
+            const { item, message } = await Item.create(keycard, {
                 type: "account",
                 platform,
                 username,
@@ -40,7 +40,7 @@ const CreateAccountScreen = () => {
                 description,
             });
 
-            addItem(safe, item);
+            addItem(keycard.safe, item);
 
             Toast.show({
                 type: "success",
@@ -52,7 +52,7 @@ const CreateAccountScreen = () => {
             setPassword("");
             setDescription("");
             setTOTP("");
-            setSafe(keycards[0]?.safe);
+            setKeycard(keycards[0]);
 
             // for some reason .pop function was left out from typescript docs
             // @ts-ignore
@@ -102,8 +102,8 @@ const CreateAccountScreen = () => {
             </View>
             <View style={styles.row}>
                 <SafeSelector
-                    value={safe.id}
-                    onValueChange={(id: string) => setSafe(keycards.find((keycard) => keycard.safe.id === id).safe)}
+                    value={keycard.safe.id}
+                    onValueChange={(id: string) => setKeycard(keycards.find((keycard) => keycard.safe.id === id))}
                 />
             </View>
             <View style={styles.row}>
