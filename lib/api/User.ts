@@ -1,17 +1,16 @@
-import { SessionTokenType } from "@wault/typings";
-import { Buffer } from "buffer";
-import SessionToken from "./AccessToken";
+import AccessToken from "./AccessToken";
+import decode from "jwt-decode";
+import { AccessTokenType } from "@wault/typings";
 
 export default class User {
     /**
      * Loads the user from the stored `access_token`
      * @returns an object containing data about the user
      */
-    public static async get(): Promise<SessionTokenType> {
-        const sessionToken = await SessionToken.get();
+    public static async get(): Promise<AccessTokenType> {
+        const accessToken = await AccessToken.get();
+        if(!accessToken) return null;
 
-        if(!sessionToken) return null;
-
-        return JSON.parse(Buffer.from(sessionToken, "base64").toString("utf8"));
+        return decode(accessToken);
     } 
 }

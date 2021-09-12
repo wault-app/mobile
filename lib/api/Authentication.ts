@@ -1,10 +1,10 @@
 import * as Device from "expo-device";
-import SessionToken from "./AccessToken";
-import EncryptionKey from "@lib/encryption/EncryptionKey";
+import AccessToken from "./AccessToken";
 import post from "@lib/fetch/post";
 import RSA from "@lib/encryption/RSA";
 import PBKDF2 from "@lib/encryption/PBKDF2";
 import AES from "@lib/encryption/AES";
+import RefreshToken from "./RefreshToken";
 
 /**
  * A library used to handle authentication chores between the REST API and the mobile application.
@@ -23,7 +23,6 @@ export default class Authentication {
         };
 
         const { publicKey, privateKey } = await RSA.generate();
-        await EncryptionKey.save(password);
 
         return await post<ResponseType>("/auth/register", {
             body: JSON.stringify({
@@ -33,8 +32,8 @@ export default class Authentication {
                 deviceName: Device.modelName,
                 deviceType: "MOBILE",
                 rsa: {
-                    public: publicKey,
-                    private: await AES.encrypt(privateKey, password),
+                    publicKey,
+                    privateKey: await AES.encrypt(privateKey, password),
                 },
             }),
         });
@@ -48,14 +47,13 @@ export default class Authentication {
     public static async login(email: string, password: string) {
         type ResponseType = {
             message: "Successful authentication!";
-            sessionToken: string;
-            rsa: {
-                public: string;
-                private: string;
-            }
+            accessToken: string;
+            refreshToken: string;
+            publicKey: string;
+            privateKey: string;
         };
 
-        const { rsa, sessionToken, message } = await post<ResponseType>("/auth/login", {
+        const { accessToken, refreshToken, publicKey, privateKey, message } = await post<ResponseType>("/auth/login", {
             body: JSON.stringify({
                 email,
                 password: this.hashPassword(password, email),
@@ -65,10 +63,10 @@ export default class Authentication {
         });
 
         await Promise.all([
-            SessionToken.save(sessionToken),
-            RSA.savePublicKey(rsa.public),
-            RSA.savePrivateKey(AES.decrypt(rsa.private, password)),
-            EncryptionKey.save(password),
+            AccessToken.save(accessToken),
+            RefreshToken.save(refreshToken),
+            RSA.savePublicKey(publicKey),
+            RSA.savePrivateKey(AES.decrypt(privateKey, password)),
         ]);
         
         return {
@@ -79,17 +77,25 @@ export default class Authentication {
     public static async verifyRegistration(id: string, secret: string) {
         type ResponseType = {
             message: "Successfully verified your email address!";
-            sessionToken: string;
+            accessToken: string;
+            refreshToken: string;
+            publicKey: string;
+            privateKey: string;
         };
 
-        const { message, sessionToken } = await post<ResponseType>("/auth/register/verify", {
+        const { message, accessToken, refreshToken, publicKey, privateKey } = await post<ResponseType>("/auth/register/verify", {
             body: JSON.stringify({
                 id,
                 secret,
             }),
         });
 
-        await SessionToken.save(sessionToken);
+        await Promise.all([
+            AccessToken.save(accessToken),
+            RefreshToken.save(refreshToken),
+            RSA.savePrivateKey(privateKey),
+            RSA.savePublicKey(publicKey),
+        ]);
 
         return {
             message,
@@ -101,7 +107,7 @@ export default class Authentication {
      * @returns {boolean} `true` if logged in 
      */
     public static async isLoggedIn() {
-        const sessionToken = await SessionToken.get();
+        const sessionToken = await AccessToken.get();
 
         return !!sessionToken;
     }

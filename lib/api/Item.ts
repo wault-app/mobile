@@ -1,7 +1,7 @@
 import post from "../fetch/post";
-import EncryptionKey from "../encryption/EncryptionKey";
 import AES from "../encryption/AES";
 import { EncryptedItemType, ItemType, ItemTypeWithoutID, KeycardType } from "@wault/typings";
+import RSA from "@lib/encryption/RSA";
 
 export default class Item {
     /**
@@ -15,11 +15,8 @@ export default class Item {
             message: "successfully_created_item";
         };
 
-        // load the user encryption key
-        const userKey = await EncryptionKey.get();
-
         // decrypt the key for the safe
-        const key = AES.decrypt(keycard.secret, userKey);
+        const key = await RSA.decrypt(keycard.secret, await RSA.getPrivateKey());
 
         // encrypt the given data
         const data = AES.encrypt(JSON.stringify(item), key);
@@ -47,11 +44,8 @@ export default class Item {
             item: EncryptedItemType;
         };
 
-        // load the encryption key and create a new AES instance
-        const userKey = await EncryptionKey.get();
-
         // decrypt the key for the safe
-        const key = AES.decrypt(keycard.secret, userKey);
+        const key = await RSA.decrypt(keycard.secret, await RSA.getPrivateKey());
 
         // encrypt the given data
         const data = AES.encrypt(JSON.stringify(item), key);

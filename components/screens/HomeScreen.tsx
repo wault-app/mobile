@@ -36,13 +36,13 @@ const HomeScreen = (props: HomeScreenProps) => {
 
     useEffect(() => {
         const data = [];
-
-        console.log(keycards);
+        
         for (const keycard of keycards) {
             data.push({
                 type: "header",
                 keycard,
             });
+            
             data.push(...keycard.safe.items.map((item) => ({ type: "item", ...item })));
         }
 

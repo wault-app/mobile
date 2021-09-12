@@ -1,5 +1,3 @@
-import * as Random from 'expo-random';
-
 export default class Secret {
     /**
      * Generates a random hex string

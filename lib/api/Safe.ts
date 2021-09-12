@@ -48,25 +48,28 @@ export default class Safe {
         try {
             const key = await RSA.decrypt(keycard.secret, await RSA.getPrivateKey());
 
-            const aes = new AES(key);
-
+            console.log(key);
+            console.log(keycard);
             return {
                 ...keycard,
                 safe: {
                     ...keycard.safe,
-                    name: aes.decrypt(keycard.safe.name),
-                    description: aes.decrypt(keycard.safe.description),
+                    name: AES.decrypt(keycard.safe.name, key),
+                    description: AES.decrypt(keycard.safe.description, key),
                     items: await Promise.all(
                         keycard.safe.items.map(
-                            async (item) => ({
-                                ...item,
-                                ...JSON.parse(aes.decrypt(item.data)),
-                            })
+                            async (item) => {
+                                return ({
+                                    ...item,
+                                    ...JSON.parse(AES.decrypt(item.data, key)),
+                                });
+                            }
                         )
                     ),
                 },
             };
-        } catch {
+        } catch(e) {
+            console.error(e);
             return;
         }
     }

@@ -6,7 +6,7 @@ const PBKDF2 = {
             keySize: size / 32,
             iterations,
         }).toString(CryptoJS.enc.Base64);
-    }
-}
+    },
+};
 
 export default PBKDF2;

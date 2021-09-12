@@ -4,7 +4,7 @@ import { Appbar, List, useTheme } from "react-native-paper";
 import { Platform, StatusBar, TextInput, UIManager } from "react-native";
 import FuseJS from "fuse.js";
 import PlatformIcon from "@components/platforms/PlatformIcon";
-import Categories from "@wault/typings/src/Category";
+import Categories from "@wault/category";
 import Platforms from "@wault/platforms";
 import { useMemo } from "react";
 import { DataProvider, LayoutProvider, RecyclerListView } from "recyclerlistview";
